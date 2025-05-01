@@ -1,0 +1,128 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(44, 34, 22, 0.6); /* fundo escuro translúcido */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+  }
+  
+  .modal {
+    background: #fef7ee; /* tom claro terroso */
+    border: 2px solid #dcb48e;
+    border-radius: 16px;
+    padding: 32px;
+    width: 90%;
+    max-width: 480px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .modal h2 {
+    margin-bottom: 24px;
+    font-size: 24px;
+    color: #4a2e1c;
+    text-align: center;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group label {
+    font-weight: bold;
+    color: #5e3d2c;
+    margin-bottom: 6px;
+  }
+  
+  .form-group input,
+  .form-group select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #d1b497;
+    background-color: #fff;
+    color: #3b2a20;
+  }
+  
+  .botoes-modal {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+  }
+  
+  .btn-primario,
+  .btn-secundario {
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s ease;
+    border: none;
+  }
+  
+  .btn-primario {
+    background-color: #8e44ad;
+    color: white;
+  }
+  
+  .btn-primario:hover {
+    background-color: #732d91;
+  }
+  
+  .btn-secundario {
+    background-color: #ccc;
+    color: #333;
+  }
+  
+  .btn-secundario:hover {
+    background-color: #aaa;
+  }
+  
+  /* animação opcional */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+
+  .notificacao-estudo {
+    font-size: 16px;
+    font-weight: 500;
+    position: absolute;
+    z-index: 90001;
+    bottom: 3%;
+    background-color:#fef7ee; 
+    width: 100%;
+    padding: 16px;
+    margin: 16px;
+    border-radius: 8px;
+  }
+
+  .notificacao-estudo span{
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .tempo-restante, .notificacao-estudo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 400;
+    color: #5e3d2c;
+  }
+
+  .tempo-restante:nth-child(2), 
+  .tempo-restante.notificacao-estudo {
+    flex-direction: column;
+    align-items: start;
+    gap: 0px;
+  }
