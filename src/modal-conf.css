@@ -126,3 +126,10 @@
     align-items: start;
     gap: 0px;
   }
+
+
+  .erro-texto {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
