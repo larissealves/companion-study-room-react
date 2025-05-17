@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import Boneco from './Boneco';
 import React from 'react';
-import Monitor from './Monitor';
+import Monitor from './Monitor'; 
+import { Link } from 'react-router-dom';
+
 //import Dialogo from './Dialogo';
 
 export default function Sala({ estaEstudando, onConfigClick }){
@@ -51,16 +53,25 @@ export default function Sala({ estaEstudando, onConfigClick }){
   return (
     
     <div className="sala-container">
-      <img src="/assets/images/sala.png" alt="Sala de Estudo" className="sala-background" />
+      {/*
+        <img src="/assets/images/sala.png" alt="Sala de Estudo" className="sala-background" />
+      */}
       
-      <div className='sala-container__botoes-navegacao'>
-        <div className='controle-estudos change-full-screen'>
-          <button onClick={isFullscreen ? sairDaTelaCheia : ativarTelaCheia}>
-            <img src="/assets/btn_maximizar.png" alt="maximizar" />
-            {isFullscreen ? '❎ Sair da Tela Cheia' : '🔲 Entrar em Tela Cheia'}
-          </button>
-        </div>
+      <Link to="/creditos" target="_blank" className="btn-creditos">💡 Credits</Link>
 
+
+      {
+        <img src="/assets/images/boneco/chat.png" alt="Sala de Estudo" className="sala-background" />
+      }
+
+      <div className='controle-estudos change-full-screen'>
+          <button className='buttons bnt-tela-cheia' onClick={isFullscreen ? sairDaTelaCheia : ativarTelaCheia}>
+            {/*<img src="/assets/btn_maximizar.png" alt="maximizar" />*/}
+            {isFullscreen ? 'Sair - Tela Cheia' : 'Entrar - Tela Cheia'}
+          </button>
+      </div>
+
+      <div className='sala-container__botoes-navegacao'>
         <div className='controle-estudos'>
           {!estaEstudando && (
             <div className="play" onClick={onConfigClick}>
@@ -96,8 +107,8 @@ export default function Sala({ estaEstudando, onConfigClick }){
       <div className="porta" onClick={handlePortaClick}>
         <img src="/assets/images/porta.png" alt="Porta" />
       </div>
-      */}
-      
+
+       
       <div className="mesa" onClick={() => setMostrarMonitor(true)}>
         <img src="/assets/images/mesa.webp" alt="Mesa" />
 
@@ -115,6 +126,8 @@ export default function Sala({ estaEstudando, onConfigClick }){
       </div>
 
       
+      */}
+     
       
       {companheiroPresente && (
         <>

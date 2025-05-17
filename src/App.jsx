@@ -1,9 +1,10 @@
 // Import de bibliotecas (sempre primeiro)
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import React from 'react';
 
 // Import de componentes (ordem alfabética)
-import Sala from './componentss/Sala'
+import Sala from './componentss/Sala';
+import  PopupSessaoEstudoFinalizada from './componentss/Modal-sessao-concluida';
 
 // Import de hooks personalizados
 import useEstudo from './hooks/useEstudo';
@@ -15,6 +16,11 @@ import './styles/animacoes.css';
 
 
 export default function App() {
+  /*START - CONTROLA POPUPS */
+  const [mostrarConfig, setMostrarConfig] = useState(false)
+ 
+  /*END - CONTROLA POPUPS */
+
   const {
     config,
     estaEstudando,
@@ -22,10 +28,12 @@ export default function App() {
     faseAtual,
     tempoRestante,
     etapas, // se você precisar
-    pararEstudo
+    pararEstudo,
+    modalSessaoFinalizada,
+    handleControlModalSessaoFinalizada
   } = useEstudo()
 
-  const [mostrarConfig, setMostrarConfig] = useState(false)
+
   const [erros, setErros] = useState({ 
     error_assunto: '',
     error_tempoHoras: '', 
@@ -96,7 +104,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <h1 className="titulo-app">Sala de Estudo Virtual</h1>
+     {/*} <h1 className="titulo-app">Sala de Estudo Virtual</h1> */}
       
       <Sala 
         estaEstudando={estaEstudando} 
@@ -111,9 +119,10 @@ export default function App() {
             
             <div className="form-group">
               <label>Assunto:</label>
-              <input 
+              <textarea 
                 name="assunto"
-                type="text" 
+                rows="4" 
+                cols="50"
                 value={assunto}
                 onChange={(e) => setAssunto(e.target.value)}
                 placeholder="Ex: Matemática, React, História..."
@@ -122,53 +131,57 @@ export default function App() {
             </div>
             
             <div className="form-group tempo-estudo">
-               <label> Tempo </label> 
-               <div>
-               
-              <input 
-                name="tempo_horas"
-                type="number" 
-                min="5" 
-                max="120" 
-                value={tempo_horas}                            
-                onChange={(e) => setTempoHoras(Number(e.target.value))}
-                //defaultValue={config.tempo}
-                //Não use defaultValue aqui! – Isso é o mais importante. 
-                // Usar defaultValue cria um campo não controlado, o que ignora setState.
-              />
-              <label>h </label>
-              
-              <input 
-                name="tempo_minutos"
-                type="number" 
-                min="5" 
-                max="120" 
-                value={tempo_minutos}                            
-                onChange={(e) => setTempoMinutos(Number(e.target.value))}
-                //defaultValue={config.tempo}
-                //Não use defaultValue aqui! – Isso é o mais importante. 
-                // Usar defaultValue cria um campo não controlado, o que ignora setState.
-              />
-              <label>min</label>
-              {erros.error_tempoHoras || erros.error_tempoMinutos && <p className="erro-texto">{erros.error_tempo}</p>}
+              <label> Tempo </label> 
+              <div>
+                <div> 
+                  <input 
+                    name="tempo_horas"
+                    type="number" 
+                    min="5" 
+                    max="120" 
+                    value={tempo_horas}                            
+                    onChange={(e) => setTempoHoras(Number(e.target.value))}
+                    //defaultValue={config.tempo}
+                    //Não use defaultValue aqui! – Isso é o mais importante. 
+                    // Usar defaultValue cria um campo não controlado, o que ignora setState.
+                  />
+                  <label>h </label>
+                </div>
+                <div> 
+                  <input 
+                    name="tempo_minutos"
+                    type="number" 
+                    min="5" 
+                    max="120" 
+                    value={tempo_minutos}                            
+                    onChange={(e) => setTempoMinutos(Number(e.target.value))}
+                    //defaultValue={config.tempo}
+                    //Não use defaultValue aqui! – Isso é o mais importante. 
+                    // Usar defaultValue cria um campo não controlado, o que ignora setState.
+                  />
+                  <label>min</label>
+                  {erros.error_tempoHoras || erros.error_tempoMinutos && <p className="erro-texto">{erros.error_tempo}</p>}
+                </div>
               </div>
             </div>
-            
-            <div className="form-group">
-              <label>Pausas a cada:</label>
-              <select 
-                name="pausas"
-                value={pausas}
-                onChange={(e) => setPausas(Number(e.target.value))}
-              >
-                <option value="10">10 minutos</option>
-                <option value="15">15 minutos</option>
-                <option value="20">20 minutos</option>
-                <option value="25">25 minutos</option>
-                <option value="30">30 minutos</option>
-                <option value="0">Sem pausas</option>
-              </select>
-            </div>
+
+            {(tempo_horas > 0 || (tempo_horas === 0 && tempo_minutos >= 20)) &&(
+              <div className="form-group">
+                <label>Pausas a cada:</label>
+                <select
+                  name="pausas"
+                  value={pausas}
+                  onChange={(e) => setPausas(Number(e.target.value))}
+                >
+                  <option value="10">10 minutos</option>
+                  <option value="15">15 minutos</option>
+                  <option value="20">20 minutos</option>
+                  <option value="25">25 minutos</option>
+                  <option value="30">30 minutos</option>
+                  <option value="0">Sem pausas</option>
+                </select>
+              </div>
+            )}
 
             {! pausas <= 0 && (
             <div className="form-group">
@@ -201,7 +214,7 @@ export default function App() {
                   
                 })}
               >
-                Iniciar Estudo
+                Iniciar estudo
               </button>
               
               <button 
@@ -219,28 +232,34 @@ export default function App() {
       {estaEstudando && (
         <div className="painel-estudo">
           
-          <span>📚<strong>{config.assunto}</strong></span> 
-          <br></br>
+          <span><strong>{config.assunto}</strong></span> 
+          {/*<br></br>
           <span>🧭 Fase atual: <strong>{faseAtual === 'estudo' ? 'Estudando' : 'Pausa'}</strong></span>
-          <br></br>
+          <br></br>*/}
 
-          {!isNaN(tempoTotalRestante) && (
-            <span>🏁 Tempo total restante da sessão: {formatarTempo(tempoTotalRestante)}</span>          )}
+          {isNaN(tempoTotalRestante) && (
+            <span>Tempo total restante da sessão: {formatarTempo(tempoTotalRestante)}</span>          )}
           <br></br>
 
           {!isNaN(tempoRestante) && (
             faseAtual === 'estudo' && config.pausas > 0 ? (
-              <span>⏳ Tempo até o próximo intervalo: {formatarTempo(tempoRestante)}</span>
+              <span>Tempo até o próximo intervalo: {formatarTempo(tempoRestante)}</span>
             ) : (
               config.pausas > 0 && config.tempopausas ? (
-                <span>☕ O intervalo finaliza em: {formatarTempo(tempoRestante)}</span>
+                <span>O intervalo finaliza em: {formatarTempo(tempoRestante)}</span>
               ) : null
             )
           )}
-        <button className="btn-encerrar-estudo" onClick={pararEstudo}> 🛑 Encerrar Estudo</button>
+        <button className="btn-primario" onClick={pararEstudo}> 🛑 Encerrar Estudo</button>
         </div>
         
       )}
+
+      {/* Modal aparece quando a sessão termina */}
+      {modalSessaoFinalizada && (
+        <PopupSessaoEstudoFinalizada onCloser={handleControlModalSessaoFinalizada} />
+      )}
+
     </div>
   )
 }

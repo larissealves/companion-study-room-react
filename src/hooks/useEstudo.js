@@ -1,6 +1,21 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef  } from 'react'
+
+import alertaSom from '../../public/assets/sounds/ringtone-126505.mp3';
+
+import PopupSessaoEstudoFinalizada from '../componentss/Modal-sessao-concluida';
 
 export default function useEstudo() {
+  const audioRef = useRef(new Audio(alertaSom));
+
+  /*START - CONTROLA POPUPS */
+  const [modalSessaoFinalizada, setMostarModalSesaoFinalizada] = useState(false)
+  const handleControlModalSessaoFinalizada = () => {
+    setMostarModalSesaoFinalizada(estadoAtual => !estadoAtual);
+  };
+
+  /*END - CONTROLA POPUPS */
+
+
   const [config, setConfig] = useState({
     assunto: '',
     tempo_horas: 1,          // tempo total em minutos
@@ -75,10 +90,32 @@ export default function useEstudo() {
           setFaseAtual(etapas[etapaIndex].tipo)
           setTempoRestante(tempo)
         } else {
-          clearInterval(interval)
+          clearInterval(interval);
+          setEstaEstudando(false);
+          setEtapas([]);
+
+          handleControlModalSessaoFinalizada();
+
+          // Toca o som
+          if (audioRef.current) {
+            audioRef.current.loop = true;
+            audioRef.current.play();
+
+            // Para o som automaticamente após 1 minuto
+            setTimeout(() => {
+              if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0;
+              }
+            }, 60000); // 1 minuto
+          }
+         {/* clearInterval(interval)
           setEstaEstudando(false)
           setEtapas([])
-          alert('Sessão de estudo concluída!')
+
+          handleControlModalSessaoFinalizada() 
+
+          {/*alert('Sessão de estudo concluída!')*/}
         }
       }
     }, 1000)
@@ -93,6 +130,8 @@ export default function useEstudo() {
     faseAtual,
     tempoRestante,
     etapas,
-    pararEstudo
+    pararEstudo,
+    modalSessaoFinalizada,
+    handleControlModalSessaoFinalizada
   }
 }
