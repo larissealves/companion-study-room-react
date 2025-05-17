@@ -6,6 +6,7 @@
   --cor-fundo: #2a1b3d;
 }
 
+/* ------------ BASE ------------ */
 body {
   margin: 0;
   font-family: 'Atlassian Sans', sans-serif;
@@ -13,8 +14,7 @@ body {
   color: var(--cor-texto);
 }
 
-/* ------------ TÍTULOS E ESTRUTURA -------------- */
-
+/* ------------ TÍTULOS ------------ */
 h1.titulo-app {
   position: absolute;
   z-index: 900;
@@ -26,7 +26,7 @@ h1.titulo-app {
 }
 
 .modal h2 {
-  margin-top: 0px;
+  margin-top: 0;
   color: var(--cor-neon);
   text-align: center;
 }
@@ -37,8 +37,7 @@ h1.titulo-app {
   color: var(--cor-texto);
 }
 
-/* ------------ BACKGROUND E ELEMENTOS DA SALA -------------- */
-
+/* ------------ LAYOUT SALA ------------ */
 .sala-container {
   position: relative;
   width: 100vw;
@@ -54,9 +53,23 @@ h1.titulo-app {
   background: linear-gradient(135deg, #2a1b3d, #3b2c5a);
 }
 
-/* ------------ OBJETOS E CENÁRIO -------------- */
+.sala-container__botoes-navegacao {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 30px;
+  position: absolute;
+  z-index: 90001;
+  top: 11%;
+  left: 7%;
+}
 
-.porta, .mesa, .cadeira, .notebook, .boneco {
+/* ------------ ELEMENTOS DA SALA ------------ */
+.porta,
+.mesa,
+.cadeira,
+.notebook,
+.boneco {
   position: absolute;
   cursor: pointer;
   transition: transform 0.3s;
@@ -69,38 +82,41 @@ h1.titulo-app {
   transform: scale(1.05) rotate(-2deg);
 }
 
-.mesa img { height: 800px; }
-.notebook img { width: 200px; height: 140px; }
+.mesa img {
+  height: 800px;
+}
+
+.notebook img {
+  width: 200px;
+  height: 140px;
+}
 
 .boneco {
   width: 120px;
   animation: entrada 0.5s ease-out;
 }
 
+/* ------------ PAINEL DE ESTUDO ------------ */
 .painel-estudo {
-    color: var(--cor-texto);
-    border: 1px solid var(--cor-primaria);
-    padding: 12px 16px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    position: absolute;
-    /* right: 20px; */
-    /* MARGIN-TOP: 39%; */
-    /* MARGIN-TOP: 8%; */
-    display: flex
-;
-      top: 11%;
-    left: 7%;
-    max-width: 200px;
-    gap: 5px;
-    flex-direction: column;
-    
-    overflow-wrap: break-word;
+  position: absolute;
+  top: 11%;
+  left: 7%;
+  max-width: 200px;
+  max-height: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--cor-primaria);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  color: var(--cor-texto);
+  overflow-wrap: break-word;
+  overflow: auto;
 }
 
-
-/* ------------ MODAL MONITOR -------------- */
-
+/* ------------ MODAL MONITOR ------------ */
 .monitor-overlay {
   background: rgba(18, 10, 30, 0.8);
 }
@@ -116,6 +132,7 @@ h1.titulo-app {
   max-width: 40%;
 }
 
+/* ------------ BARRA DE ENDEREÇO ------------ */
 .address-bar-container {
   background: #472d63;
 }
@@ -126,14 +143,18 @@ h1.titulo-app {
   border: 1px solid var(--cor-primaria);
 }
 
-/* ------------ BOTÕES E CONTROLES -------------- */
+/* ------------ BOTÕES ------------ */
+.btn-primario,
+.btn-secundario {
+  cursor: pointer;
+  min-height: 35px;
+  border-radius: 5px;
+  border: 1px solid var(--cor-primaria);
+}
 
 .btn-primario {
   background-color: var(--cor-primaria);
   color: white;
-  border: none;
-  min-height: 35px;
-  border-radius: 5px;
 }
 
 .btn-primario:hover {
@@ -142,10 +163,7 @@ h1.titulo-app {
 
 .btn-secundario {
   background-color: transparent;
-  border: 1px solid var(--cor-primaria);
   color: #fff;
-  min-height: 35px;
-  border-radius: 5px;
 }
 
 .btn-secundario:hover {
@@ -164,7 +182,7 @@ h1.titulo-app {
 .btn-aba-navegacao-active {
   background-color: var(--cor-primaria);
   color: white;
-  border-bottom: 2px solid #ff7de9;
+  border-bottom: 2px solid var(--cor-neon);
 }
 
 .btn-icon {
@@ -182,8 +200,38 @@ h1.titulo-app {
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
 }
 
-/* ------------ FORM E INPUTS -------------- */
+button.btn-encerrar-estudo {
+  margin-top: 20px;
+}
 
+.btn-creditos {
+  position: absolute;
+  bottom: 1%;
+  right: 1%;
+  padding: 6px 14px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 8px;
+  background-color: #37284f;
+  color: #e0d6f8;
+  border: 1px solid #7c4bb8;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  z-index: 999999999;
+}
+
+.btn-creditos.doacao {
+  position: absolute;
+  bottom: 1%;
+  right: 10%;
+}
+
+.btn-creditos:hover {
+  background-color: #4a3366;
+  color: #fff;
+}
+
+/* ------------ FORMULÁRIOS ------------ */
 .form-group input,
 .form-group select,
 .form-group textarea {
@@ -195,68 +243,31 @@ h1.titulo-app {
   font-size: 16px;
 }
 
-/* ------------ ANIMAÇÃO ENTRADA -------------- */
+/* ------------ CONTROLE ESTUDOS ------------ */
+.controle-estudos img {
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
+  width: 90px;
+}
 
+.controle-estudos img:hover {
+  transform: scale(1.2);
+  margin: 0 5px;
+}
+
+/* ------------ ANIMAÇÕES ------------ */
 @keyframes entrada {
-  0% { opacity: 0; transform: translateX(50px); }
-  100% { opacity: 1; transform: translateX(0); }
-}
-
-
-.sala-container__botoes-navegacao {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  position: absolute;
-  z-index: 90001;
-  flex-direction: column;
-      top: 11%;
-    left: 7%;
-}
-
-.controle-estudos {
-  
-  img {
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
-    width: 90px;
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
   }
-
-  img:hover {
-    transform: scale(1.2);
-    margin: 0 5px;
+  100% {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
-button.btn-encerrar-estudo {
-    margin-top: 20px;
-}
-
-
-
-
-.btn-creditos {
-  
-    z-index: 999999999;
-    right: 1%;
-    color: #fff;
-    position: absolute;
-    /* top: 20px; */
-    /* left: 20px; */
-    padding: 6px 14px;
-    font-size: 15px;
-    font-weight: 500;
-    border-radius: 8px;
-    background-color: #37284f;
-    color: #e0d6f8;
-    border: 1px solid #7c4bb8;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    bottom: 1%;
-}
-
-.btn-creditos:hover {
-  background-color: #4a3366;
-  color: #fff;
+.modal-overlay.modal-sessao-finalizada .footer {
+  justify-self: center;
 }

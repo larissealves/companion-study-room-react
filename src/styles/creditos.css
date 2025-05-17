@@ -26,8 +26,8 @@
   margin-bottom: 24px;
   color: #e6d6f9;
   font-weight: 600;
-  text-shadow: 0 0 3px #7c4bb8, 0 0 6px #3b2c5a;
   letter-spacing: 0.5px;
+  text-shadow: 0 0 3px #7c4bb8, 0 0 6px #3b2c5a;
 }
 
 .subtitulo-creditos {
@@ -62,19 +62,20 @@
 }
 
 .sessao p {
-  line-height: 1.6;
   color: #f0e6ff;
+  line-height: 1.6;
 }
 
 .sessao ul {
   list-style: disc;
-  margin-top: 12px;
   padding-left: 20px;
+  margin-top: 12px;
 }
 
 .sessao ul li {
-  margin-bottom: 8px;
-  color: #e0d6f8;
+  color: #d8c6f0;
+  margin-bottom: 6px;
+  line-height: 1.6;
 }
 
 .link-neon {
@@ -86,8 +87,8 @@
 
 .link-neon:hover {
   color: rgb(197, 125, 245);
-  /*text-shadow: 0 0 3px #b877d8;*/
   transition: color 0.3s ease, text-shadow 0.3s ease;
+  /* text-shadow: 0 0 3px #b877d8; */
 }
 
 footer {
@@ -107,15 +108,4 @@ footer {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.sessao ul {
-  padding-left: 20px;
-  margin-top: 12px;
-}
-
-.sessao ul li {
-  margin-bottom: 6px;
-  color: #d8c6f0;
-  line-height: 1.6;
 }

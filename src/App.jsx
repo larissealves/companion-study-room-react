@@ -1,25 +1,21 @@
-// Import de bibliotecas (sempre primeiro)
-import { use, useEffect, useState } from 'react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-// Import de componentes (ordem alfabética)
 import Sala from './componentss/Sala';
-import  PopupSessaoEstudoFinalizada from './componentss/Modal-sessao-concluida';
-
-// Import de hooks personalizados
+import RelogioFundo from './componentss/Clock';
+import PopupSessaoEstudoFinalizada from './componentss/Modal-sessao-concluida';
 import useEstudo from './hooks/useEstudo';
 
-// Import de estilos (por ordem de especificidade)
 import './styles/global.css';
 import './modal-conf.css';
-import './styles/animacoes.css';
-
 
 export default function App() {
-  /*START - CONTROLA POPUPS */
-  const [mostrarConfig, setMostrarConfig] = useState(false)
- 
-  /*END - CONTROLA POPUPS */
+  const [showConfig, setShowConfig] = useState(false);
+  const [subject, setSubject] = useState('');
+  const [hours, setHours] = useState('');
+  const [minutes, setMinutes] = useState('');
+  const [breakInterval, setBreakInterval] = useState(0);
+  const [breakDuration, setBreakDuration] = useState(5);
+  const [errors, setErrors] = useState({});
 
   const {
     config,
@@ -27,239 +23,183 @@ export default function App() {
     iniciarEstudo,
     faseAtual,
     tempoRestante,
-    etapas, // se você precisar
+    etapas,
     pararEstudo,
     modalSessaoFinalizada,
     handleControlModalSessaoFinalizada
-  } = useEstudo()
+  } = useEstudo();
 
+  const totalRemaining = etapas?.length > 0
+    ? etapas.slice(1).reduce((sum, etapa) => sum + etapa.duracao, 0) + tempoRestante
+    : 0;
 
-  const [erros, setErros] = useState({ 
-    error_assunto: '',
-    error_tempoHoras: '', 
-    error_tempoMinutos: '',
-    error_tempopausas: '' 
-  })
-  
-  const tempoAteTroca = tempoRestante
-  // Tempo total restante até o fim da sessão
-  const tempoTotalRestante = etapas?.length > 0
-  ? etapas.slice(1) // exclui a etapa atual (a que está rodando)
-    .reduce((total, etapa) => total + etapa.duracao, 0) + tempoRestante
-  :0
+  const formatTime = (seconds) => {
+    if (typeof seconds !== 'number' || isNaN(seconds) || seconds < 0) return '00:00';
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    return h > 0
+      ? `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+      : `${m}:${s.toString().padStart(2, '0')}`;
+  };
 
-  const formatarTempo = (segundos) => {
-    if(typeof segundos !== 'number' || isNaN(segundos) | segundos < 0) return '00:00'
-    const m = Math.floor(segundos / 60)
-    const s = segundos % 60
-    return `${m}:${s.toString().padStart(2, '0')}`
-  }
+  useEffect(() => {
+    if (showConfig) {
+      setSubject('');
+      setHours('');
+      setMinutes('');
+      setBreakInterval(0);
+      setBreakDuration(5);
+      setErrors({});
+    }
+  }, [showConfig]);
 
-  // Estados locais para os campos do formulário
-  const [assunto, setAssunto] = useState('')
-  const [tempo_horas, setTempoHoras] = useState(0)
-  const [tempo_minutos, setTempoMinutos] = useState(0)
-  const [pausas, setPausas] =  useState(0)
-  const [tempopausas, setTempoPausas] =  useState(5)
+  const handleStart = () => {
+    const newErrors = {};
 
-  // Limpar campos do formulário
-  useEffect(() =>
-    {
-      if(mostrarConfig) {
-        setAssunto('')
-        setTempoHoras(0)
-        setTempoMinutos(0)
-        setPausas(0) 
-        setTempoPausas(5) 
-        setErros({})
-      }
-    }, [mostrarConfig]
-  )
- 
-  const handleIniciarEstudo = () => {
-    const novosErros = {}
-    if (assunto.trim() === '') {
-      novosErros.error_assunto = 'O campo "Assunto" não pode estar em branco.'
+    if (subject.trim() === '') {
+      newErrors.subject = 'Subject cannot be empty.';
     }
 
-    if (tempo_horas <= 0 && tempo_minutos <= 0) {
-      novosErros.error_tempo =  'O tempo de estudo deve ser maior que 0.'
+    if (Number(hours) <= 0 && Number(minutes) <= 0) {
+      newErrors.time = 'Study time must be greater than 0.';
     }
 
-    if (Object.keys(novosErros).length > 0) {
-      setErros(novosErros)
-      return
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
     }
 
     iniciarEstudo({
-      assunto, 
-      tempo_horas, 
-      tempo_minutos, 
-      pausas, 
-      tempopausas: pausas > 0 ? tempopausas : 0
-    })
-    setErros({})
-    setMostrarConfig(false)
-  }
+      assunto: subject,
+      tempo_horas: Number(hours),
+      tempo_minutos: Number(minutes),
+      pausas: breakInterval,
+      tempopausas: breakInterval > 0 ? breakDuration : 0
+    });
+
+    setShowConfig(false);
+    setErrors({});
+  };
 
   return (
     <div className="app">
-     {/*} <h1 className="titulo-app">Sala de Estudo Virtual</h1> */}
-      
-      <Sala 
-        estaEstudando={estaEstudando} 
-        onConfigClick={() => setMostrarConfig(true)}
-      />
-      
-      {/* Modal de Configuração */}
-      {mostrarConfig && (
+      {estaEstudando && (
+        <RelogioFundo tempoRestante={totalRemaining} faseAtual={faseAtual} />
+      )}
+
+      <Sala estaEstudando={estaEstudando} onConfigClick={() => setShowConfig(true)} />
+
+      {showConfig && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2>Configurar Sessão</h2>
-            
+            <h2>Study Session Setup</h2>
+
             <div className="form-group">
-              <label>Assunto:</label>
-              <textarea 
-                name="assunto"
-                rows="4" 
-                cols="50"
-                value={assunto}
-                onChange={(e) => setAssunto(e.target.value)}
-                placeholder="Ex: Matemática, React, História..."
+              <label>Subject:</label>
+              <textarea
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder="e.g. Math, React, History..."
               />
-              {erros.error_assunto && <p className="erro-texto">{erros.error_assunto}</p>}
-            </div>
-            
-            <div className="form-group tempo-estudo">
-              <label> Tempo </label> 
-              <div>
-                <div> 
-                  <input 
-                    name="tempo_horas"
-                    type="number" 
-                    min="5" 
-                    max="120" 
-                    value={tempo_horas}                            
-                    onChange={(e) => setTempoHoras(Number(e.target.value))}
-                    //defaultValue={config.tempo}
-                    //Não use defaultValue aqui! – Isso é o mais importante. 
-                    // Usar defaultValue cria um campo não controlado, o que ignora setState.
-                  />
-                  <label>h </label>
-                </div>
-                <div> 
-                  <input 
-                    name="tempo_minutos"
-                    type="number" 
-                    min="5" 
-                    max="120" 
-                    value={tempo_minutos}                            
-                    onChange={(e) => setTempoMinutos(Number(e.target.value))}
-                    //defaultValue={config.tempo}
-                    //Não use defaultValue aqui! – Isso é o mais importante. 
-                    // Usar defaultValue cria um campo não controlado, o que ignora setState.
-                  />
-                  <label>min</label>
-                  {erros.error_tempoHoras || erros.error_tempoMinutos && <p className="erro-texto">{erros.error_tempo}</p>}
-                </div>
-              </div>
+              {errors.subject && <p className="erro-texto">{errors.subject}</p>}
             </div>
 
-            {(tempo_horas > 0 || (tempo_horas === 0 && tempo_minutos >= 20)) &&(
+            <div className="form-group tempo-estudo">
+              <label>Study time</label>
+              <div>
+                <div>
+                  <input
+                    type="number"
+                    min="0"
+                    value={hours}
+                    onChange={(e) => setHours(e.target.value)}
+                    placeholder="hh"
+                  />
+                  <label>h</label>
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    min="0"
+                    value={minutes}
+                    onChange={(e) => setMinutes(e.target.value)}
+                    placeholder="mm"
+                  />
+                  <label>min</label>
+                </div>
+              </div>
+               {errors.time && <p className="erro-texto">{errors.time}</p>}
+            </div>
+
+            {(Number(hours) > 0 || Number(minutes) >= 20) && (
               <div className="form-group">
-                <label>Pausas a cada:</label>
+                <label>Break every:</label>
                 <select
-                  name="pausas"
-                  value={pausas}
-                  onChange={(e) => setPausas(Number(e.target.value))}
+                  value={breakInterval}
+                  onChange={(e) => setBreakInterval(Number(e.target.value))}
                 >
-                  <option value="10">10 minutos</option>
-                  <option value="15">15 minutos</option>
-                  <option value="20">20 minutos</option>
-                  <option value="25">25 minutos</option>
-                  <option value="30">30 minutos</option>
-                  <option value="0">Sem pausas</option>
+                  <option value="10">10 minutes</option>
+                  <option value="15">15 minutes</option>
+                  <option value="20">20 minutes</option>
+                  <option value="25">25 minutes</option>
+                  <option value="30">30 minutes</option>
+                  <option value="0">No breaks</option>
                 </select>
               </div>
             )}
 
-            {! pausas <= 0 && (
-            <div className="form-group">
-              <label>Tempo da pausa:</label>
-              <select 
-                name="tempopausas"
-                value={tempopausas}
-                onChange={(e) => setTempoPausas(Number(e.target.value))}
-              >
-                <option value="5">5 minutos</option>
-                <option value="10">10 minutos</option>
-                <option value="15">15 minutos</option>
-                <option value="20">20 minutos</option>
-                <option value="25">25 minutos</option>
-                <option value="30">30 minutos</option>
-              </select>
-             
-            </div>
+            {breakInterval > 0 && (
+              <div className="form-group">
+                <label>Break duration:</label>
+                <select
+                  value={breakDuration}
+                  onChange={(e) => setBreakDuration(Number(e.target.value))}
+                >
+                  <option value="5">5 minutes</option>
+                  <option value="10">10 minutes</option>
+                  <option value="15">15 minutes</option>
+                  <option value="20">20 minutes</option>
+                  <option value="25">25 minutes</option>
+                  <option value="30">30 minutes</option>
+                </select>
+              </div>
             )}
 
             <div className="botoes-modal">
-              <button 
-                className="btn-primario"
-                onClick={() => handleIniciarEstudo({
-                  assunto,
-                  tempo_horas,
-                  tempo_minutos,
-                  pausas,
-                  tempopausas: pausas > 0 ? tempopausas: 0
-                  
-                })}
-              >
-                Iniciar estudo
+              <button className="btn-primario" onClick={handleStart}>
+                Start Session
               </button>
-              
-              <button 
-                className="btn-secundario"
-                onClick={() => setMostrarConfig(false)}
-              >
-                Cancelar
+              <button className="btn-secundario" onClick={() => setShowConfig(false)}>
+                Cancel
               </button>
             </div>
           </div>
         </div>
       )}
-      
-      {/* Notificação quando estiver estudando */}
+
       {estaEstudando && (
         <div className="painel-estudo">
-          
-          <span><strong>{config.assunto}</strong></span> 
-          {/*<br></br>
-          <span>🧭 Fase atual: <strong>{faseAtual === 'estudo' ? 'Estudando' : 'Pausa'}</strong></span>
-          <br></br>*/}
-
-          {isNaN(tempoTotalRestante) && (
-            <span>Tempo total restante da sessão: {formatarTempo(tempoTotalRestante)}</span>          )}
-          <br></br>
+          <button className="btn-primario btn-stop-time" onClick={pararEstudo}>
+            🛑 End Session
+          </button>
+          <span><strong>{config.assunto}</strong></span>
 
           {!isNaN(tempoRestante) && (
             faseAtual === 'estudo' && config.pausas > 0 ? (
-              <span>Tempo até o próximo intervalo: {formatarTempo(tempoRestante)}</span>
+              <span>Time to next break: {formatTime(tempoRestante)}</span>
             ) : (
               config.pausas > 0 && config.tempopausas ? (
-                <span>O intervalo finaliza em: {formatarTempo(tempoRestante)}</span>
+                <span>Break ends in: {formatTime(tempoRestante)}</span>
               ) : null
             )
           )}
-        <button className="btn-primario" onClick={pararEstudo}> 🛑 Encerrar Estudo</button>
         </div>
-        
       )}
 
-      {/* Modal aparece quando a sessão termina */}
       {modalSessaoFinalizada && (
         <PopupSessaoEstudoFinalizada onCloser={handleControlModalSessaoFinalizada} />
       )}
-
     </div>
-  )
+  );
 }
