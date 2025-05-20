@@ -1,7 +1,7 @@
 import React from 'react';
 import '../modal-conf.css';
 
-function PopupSessaoEstudoFinalizada({ onCloser }) {
+function PopupIntervaloFinalizado({ onCloser }) {
   const closePopUp = () => {
     onCloser();
   };
@@ -23,4 +23,4 @@ function PopupSessaoEstudoFinalizada({ onCloser }) {
   );
 }
 
-export default PopupSessaoEstudoFinalizada;
+export default PopupIntervaloFinalizado;

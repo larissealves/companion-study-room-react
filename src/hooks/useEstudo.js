@@ -1,12 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import alertaSom from '../../public/assets/sounds/ringtone-126505.mp3';
-import PopupSessaoEstudoFinalizada from '../componentss/Modal-sessao-concluida';
 
 export default function useEstudo() {
   const audioRef = useRef(new Audio(alertaSom));
 
   // Handle study finished popup
   const [modalSessaoFinalizada, setMostarModalSesaoFinalizada] = useState(false);
+  const [modalIntervaloFinalizado, setMostarModalIntervaloFinalizado] = useState(false);
+
+  const handleControlModalIntervaloFinalizado = () => {
+    setMostarModalIntervaloFinalizado(prev => !prev);
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+  };
+
   const handleControlModalSessaoFinalizada = () => {
     setMostarModalSesaoFinalizada(prev => !prev);
     audioRef.current.pause();
@@ -78,16 +85,38 @@ export default function useEstudo() {
     setTempoRestante(tempo);
 
     const interval = setInterval(() => {
-      tempo -= 1;
-      setTempoRestante(tempo);
+      // enquanto o Modal de alerta estiver aberto, o tempo deve parar de contar
+      // modal de aviso que o intervalo finalizou
+      if(!modalIntervaloFinalizado){
+          tempo -= 1; 
+          setTempoRestante(tempo);
+      }
 
       if (tempo <= 0) {
+        
         etapaIndex += 1;
 
         if (etapaIndex < etapas.length) {
           tempo = etapas[etapaIndex].duracao;
+          //se começou o intervalo - tocar alerta
+          if (etapaIndex.tipo === 'estudo') {
+            handleControlModalIntervaloFinalizado();
+            if (audioRef.current) {
+              audioRef.current.loop = true;
+              audioRef.current.play();
+
+              // Stop sound automatically after 1 minute
+              setTimeout(() => {
+                if (audioRef.current) {
+                  audioRef.current.pause();
+                  audioRef.current.currentTime = 0;
+                }
+              }, 60000);
+            }
+          }
           setFaseAtual(etapas[etapaIndex].tipo);
           setTempoRestante(tempo);
+
         } else {
           clearInterval(interval);
           setEstaEstudando(false);
@@ -121,7 +150,11 @@ export default function useEstudo() {
     tempoRestante,
     etapas,
     pararEstudo,
+
     modalSessaoFinalizada,
-    handleControlModalSessaoFinalizada
+    handleControlModalSessaoFinalizada,
+
+    modalIntervaloFinalizado,
+    handleControlModalIntervaloFinalizado
   };
 }

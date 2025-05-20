@@ -204,10 +204,17 @@ button.btn-encerrar-estudo {
   margin-top: 20px;
 }
 
-.btn-creditos {
-  position: absolute;
+.container-botoes-mais-informacoes {
   bottom: 1%;
-  right: 1%;
+    right: 1%;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    position: absolute;
+}
+
+.btn-creditos {
   padding: 6px 14px;
   font-size: 15px;
   font-weight: 500;
@@ -221,9 +228,7 @@ button.btn-encerrar-estudo {
 }
 
 .btn-creditos.doacao {
-  position: absolute;
-  bottom: 1%;
-  right: 10%;
+ 
 }
 
 .btn-creditos:hover {
@@ -270,4 +275,16 @@ button.btn-encerrar-estudo {
 
 .modal-overlay.modal-sessao-finalizada .footer {
   justify-self: center;
+}
+
+@media (max-width: 768px) {
+  .painel-estudo {
+    top: 30%;
+    left: 30%;
+  }
+
+  .btn-creditos.doacao {
+      bottom: 10%;
+      right: 1%;
+  }
 }

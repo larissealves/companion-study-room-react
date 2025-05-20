@@ -44,3 +44,10 @@
 .btn-fechar-relogio:hover {
   color: #fff;
 }
+
+
+@media (max-width: 768px) {
+  .relogio-fundo {
+    bottom: 0%;
+  }
+}

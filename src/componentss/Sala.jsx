@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 
 import PopupApoieDesenvolvedor from './PopupApoieDesenvolvedor';
 
+import useIsMobile from '../hooks/backgroundImage'; 
+
 
 export default function Sala({ estaEstudando, onConfigClick }) {
   const [mostrarPopupDoacao, setMostrarPopupDoacao] = useState(false);
@@ -40,16 +42,30 @@ export default function Sala({ estaEstudando, onConfigClick }) {
     };
   }, []);
 
+  const isMobile = useIsMobile();
+
   return (
+    
     <div className="sala-container">
-      <img 
+
+      <img
+        src={
+          isMobile
+            ? '/assets/images/sala-mobile.png'  // imagem específica para celular/tablet
+            : '/assets/images/sala.png'         // imagem padrão para desktop
+        }
+        alt="Study Room"
+        className="sala-background"
+      />
+
+      {/*<img 
         src="/assets/images/sala.png" 
         alt="Sala de Estudo" 
         className="sala-background" 
-      />
+      />*/}
 
-      
-    <button 
+    <div className='container-botoes-mais-informacoes'>
+      <button 
       className="btn-creditos doacao"
       onClick={() => setMostrarPopupDoacao(true)}
       title="Support the developer"
@@ -64,6 +80,8 @@ export default function Sala({ estaEstudando, onConfigClick }) {
       >
         💡 Credits
       </Link>
+    </div> 
+    
 
       <div className="controle-estudos change-full-screen">
         <button 

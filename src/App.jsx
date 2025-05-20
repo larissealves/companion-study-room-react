@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import Sala from './componentss/Sala';
 import RelogioFundo from './componentss/Clock';
-import PopupSessaoEstudoFinalizada from './componentss/Modal-sessao-concluida';
+import PopupSessaoEstudoFinalizado from './componentss/Modal-sessao-concluido';
+import PopupIntervaloFinalizado from './componentss/Modal-intervalo-concluido';
+
 import useEstudo from './hooks/useEstudo';
 
 import './styles/global.css';
@@ -25,8 +27,12 @@ export default function App() {
     tempoRestante,
     etapas,
     pararEstudo,
+
     modalSessaoFinalizada,
-    handleControlModalSessaoFinalizada
+    handleControlModalSessaoFinalizada,
+
+    modalIntervaloFinalizado,
+    handleControlModalIntervaloFinalizado
   } = useEstudo();
 
   const totalRemaining = etapas?.length > 0
@@ -138,7 +144,8 @@ export default function App() {
                 <select
                   value={breakInterval}
                   onChange={(e) => setBreakInterval(Number(e.target.value))}
-                >
+                > 
+                  <option value="1">1 minutes</option>
                   <option value="10">10 minutes</option>
                   <option value="15">15 minutes</option>
                   <option value="20">20 minutes</option>
@@ -156,6 +163,7 @@ export default function App() {
                   value={breakDuration}
                   onChange={(e) => setBreakDuration(Number(e.target.value))}
                 >
+                  <option value="1">1 minutes</option>
                   <option value="5">5 minutes</option>
                   <option value="10">10 minutes</option>
                   <option value="15">15 minutes</option>
@@ -198,8 +206,13 @@ export default function App() {
       )}
 
       {modalSessaoFinalizada && (
-        <PopupSessaoEstudoFinalizada onCloser={handleControlModalSessaoFinalizada} />
+        <PopupSessaoEstudoFinalizado onCloser={handleControlModalSessaoFinalizada} />
       )}
+
+      {modalIntervaloFinalizado && (
+        <PopupIntervaloFinalizado onCloser={handleControlModalIntervaloFinalizado} />
+      )}
+
     </div>
   );
 }
