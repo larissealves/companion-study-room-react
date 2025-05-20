@@ -53,6 +53,16 @@ h1.titulo-app {
   background: linear-gradient(135deg, #2a1b3d, #3b2c5a);
 }
 
+.sala-background {
+  content: url('/assets/images/sala.png');
+}
+
+@media (max-width: 768px) {
+  .sala-background {
+    content: url('/assets/images/sala-mobile.png');
+  }
+}
+
 .sala-container__botoes-navegacao {
   display: flex;
   justify-content: center;
@@ -278,13 +288,19 @@ button.btn-encerrar-estudo {
 }
 
 @media (max-width: 768px) {
+  .sala-container__botoes-navegacao {
+    top: 2%;
+    left: 9%;
+  }
+
   .painel-estudo {
-    top: 30%;
-    left: 30%;
+    top: 45% !important;
+    max-width: 80%;
+    max-height: 40%;
   }
 
   .btn-creditos.doacao {
-      bottom: 10%;
+      bottom: 5%;
       right: 1%;
   }
 }

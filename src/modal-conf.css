@@ -128,3 +128,8 @@
   gap: 5px;
 }
 
+@media (max-width: 768px) {
+  .modal {
+    margin: 10px;
+  }
+}

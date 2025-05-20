@@ -145,7 +145,6 @@ export default function App() {
                   value={breakInterval}
                   onChange={(e) => setBreakInterval(Number(e.target.value))}
                 > 
-                  <option value="1">1 minutes</option>
                   <option value="10">10 minutes</option>
                   <option value="15">15 minutes</option>
                   <option value="20">20 minutes</option>
@@ -163,7 +162,7 @@ export default function App() {
                   value={breakDuration}
                   onChange={(e) => setBreakDuration(Number(e.target.value))}
                 >
-                  <option value="1">1 minutes</option>
+                  
                   <option value="5">5 minutes</option>
                   <option value="10">10 minutes</option>
                   <option value="15">15 minutes</option>

@@ -43,74 +43,59 @@ export default function Sala({ estaEstudando, onConfigClick }) {
   }, []);
 
   const isMobile = useIsMobile();
+  console.log('Is mobile:', isMobile);
 
   return (
-    
     <div className="sala-container">
-
-      <img
-        src={
-          isMobile
-            ? '/assets/images/sala-mobile.png'  // imagem específica para celular/tablet
-            : '/assets/images/sala.png'         // imagem padrão para desktop
-        }
-        alt="Study Room"
-        className="sala-background"
-      />
-
-      {/*<img 
-        src="/assets/images/sala.png" 
-        alt="Sala de Estudo" 
-        className="sala-background" 
-      />*/}
-
-    <div className='container-botoes-mais-informacoes'>
-      <button 
-      className="btn-creditos doacao"
-      onClick={() => setMostrarPopupDoacao(true)}
-      title="Support the developer"
-    >
-      ☕ Support
-    </button>
-
-      <Link 
-        to="/creditos" 
-        target="_blank" 
-        className="btn-creditos"
+      <div className='sala-background'></div>
+        
+      <div className='container-botoes-mais-informacoes'>
+        <Link 
+        className="btn-creditos doacao"
+        onClick={() => setMostrarPopupDoacao(true)}
+        title="Support the developer"
       >
-        💡 Credits
+        ☕ Support
       </Link>
-    </div> 
-    
 
-      <div className="controle-estudos change-full-screen">
-        <button 
-          className="buttons bnt-tela-cheia" 
-          onClick={isFullscreen ? sairDaTelaCheia : ativarTelaCheia}
+        <Link 
+          to="/creditos" 
+          target="_blank" 
+          className="btn-creditos"
         >
-          {isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
-        </button>
-      </div>
+          💡 Credits
+        </Link>
+      </div> 
+      
 
-      <div className="sala-container__botoes-navegacao">
-        <div className="controle-estudos">
-          {!estaEstudando && (
-            <div 
-              className="play" 
-              title="Start Pomodoro" 
-              onClick={onConfigClick}
-            >
-              <img 
-                src="/assets/play.png" 
-                alt="play" 
-              />
-            </div>
-          )}
+        <div className="controle-estudos change-full-screen">
+          <button 
+            className="buttons bnt-tela-cheia" 
+            onClick={isFullscreen ? sairDaTelaCheia : ativarTelaCheia}
+          >
+            {isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+          </button>
         </div>
-      </div>
-      {mostrarPopupDoacao && (
-        <PopupApoieDesenvolvedor onClose={() => setMostrarPopupDoacao(false)} />
-      )}
+
+        <div className="sala-container__botoes-navegacao">
+          <div className="controle-estudos">
+            {!estaEstudando && (
+              <div 
+                className="play" 
+                title="Start Pomodoro" 
+                onClick={onConfigClick}
+              >
+                <img 
+                  src="/assets/play.png" 
+                  alt="play" 
+                />
+              </div>
+            )}
+          </div>
+        </div>
+        {mostrarPopupDoacao && (
+          <PopupApoieDesenvolvedor onClose={() => setMostrarPopupDoacao(false)} />
+        )}
     </div>
   );
 }

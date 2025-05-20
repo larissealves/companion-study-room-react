@@ -48,6 +48,11 @@
 
 @media (max-width: 768px) {
   .relogio-fundo {
-    bottom: 0%;
+    top: 10%;
+  }
+
+  .tempo-destacado {
+    font-size: 20px;
+    font-weight: bold;
   }
 }
