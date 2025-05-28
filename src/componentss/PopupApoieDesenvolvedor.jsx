@@ -1,8 +1,27 @@
-import React from 'react';
-import '../modal-conf.css';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function PopupApoieDesenvolvedor({ onClose }) {
+  const [mostrarPopupDoacao, setMostrarPopupDoacao] = useState(false);
+
+  const closePopUp = () => {
+    setMostrarPopupDoacao(false)
+  };
+  
   return (
+    <div>
+        <Link
+          className="btn-credits"
+          onClick={() => setMostrarPopupDoacao(true)}
+          title="Support the developer"
+        >
+          Support
+        </Link>
+
+        
+    {mostrarPopupDoacao && (
+
+   
     <div className="modal-overlay modal-sessao-finalizada">
       <div className="modal">
         <h2>💜 Support the Developer</h2>
@@ -27,12 +46,14 @@ function PopupApoieDesenvolvedor({ onClose }) {
         </p>
 
         <div className="footer" style={{ marginTop: '24px' }}>
-          <button className="btn-primario" onClick={onClose}>
+          <button className="btn-primary" onClick={closePopUp}>
             Close
           </button>
         </div>
       </div>
     </div>
+   )}
+  </div>
   );
 }
 

@@ -1,70 +1,75 @@
 import { useState, useEffect, useRef } from 'react';
-import alertaSom from '../../public/assets/sounds/ringtone-126505.mp3';
+import alertaSom from '../sounds/ringtone-126505.mp3';
 
 export default function useEstudo() {
   const audioRef = useRef(new Audio(alertaSom));
+  const etapaIndexRef = useRef(0);
+  const tempoRef = useRef(0);
 
-  // Handle study finished popup
-  const [modalSessaoFinalizada, setMostarModalSesaoFinalizada] = useState(false);
-  const [modalIntervaloFinalizado, setMostarModalIntervaloFinalizado] = useState(false);
+  const [modalSessaoFinalizada, setMostrarModalSessaoFinalizada] = useState(false);
+  const [modalIntervaloFinalizado, setMostrarModalIntervaloFinalizado] = useState(false);
 
   const handleControlModalIntervaloFinalizado = () => {
-    setMostarModalIntervaloFinalizado(prev => !prev);
-    audioRef.current.pause();
-    audioRef.current.currentTime = 0;
+    setMostrarModalIntervaloFinalizado(prev => !prev);
+    stopAudio();
   };
 
   const handleControlModalSessaoFinalizada = () => {
-    setMostarModalSesaoFinalizada(prev => !prev);
-    audioRef.current.pause();
-    audioRef.current.currentTime = 0;
+    setMostrarModalSessaoFinalizada(prev => !prev);
+    stopAudio();
   };
 
-  // Initial configuration
+  const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+  };
+
   const [config, setConfig] = useState({
     assunto: '',
-    tempo_horas: 1,      // total study hours
-    tempo_minutos: 1,    // total study minutes
-    pausas: 25,          // break every X minutes
-    tempopausas: 5       // break duration in minutes
+    tempo_horas: 1,
+    tempo_minutos: 0,
+    pausas: 25,
+    tempopausas: 5
   });
 
   const [estaEstudando, setEstaEstudando] = useState(false);
-  const [faseAtual, setFaseAtual] = useState('estudo'); // 'estudo' or 'pausa'
+  const [faseAtual, setFaseAtual] = useState('estudo');
   const [tempoRestante, setTempoRestante] = useState(0);
-  const [etapas, setEtapas] = useState([]); // sequence of blocks
+  const [etapas, setEtapas] = useState([]);
 
-  // Start study session and build block sequence
   const iniciarEstudo = (dados) => {
     const total = (dados.tempo_horas * 60) + Number(dados.tempo_minutos);
     const intervalo = dados.pausas;
     const pausa = dados.tempopausas;
 
-    setConfig(dados);
-    setEstaEstudando(true);
+    const etapasTemp = [];
 
     if (intervalo <= 0 || pausa <= 0 || intervalo >= total) {
-      // No breaks: single block
-      setEtapas([{ tipo: 'estudo', duracao: total * 60 }]);
+      etapasTemp.push({ tipo: 'estudo', duracao: total * 60 });
     } else {
-      const etapasTemp = [];
       let restante = total;
-
       while (restante > intervalo) {
         etapasTemp.push({ tipo: 'estudo', duracao: intervalo * 60 });
         etapasTemp.push({ tipo: 'pausa', duracao: pausa * 60 });
         restante -= intervalo;
       }
-
-      // Final study block
       if (restante > 0) {
         etapasTemp.push({ tipo: 'estudo', duracao: restante * 60 });
       }
-
-      setEtapas(etapasTemp);
     }
 
-    setFaseAtual('estudo');
+    console.log('🚀 Etapas geradas:', etapasTemp);
+
+    etapaIndexRef.current = 0;
+    tempoRef.current = etapasTemp[0]?.duracao || 0;
+    setFaseAtual(etapasTemp[0]?.tipo || 'estudo');
+    setTempoRestante(tempoRef.current);
+
+    setConfig(dados);
+    setEtapas(etapasTemp);
+    setEstaEstudando(true);
   };
 
   const pararEstudo = () => {
@@ -72,50 +77,42 @@ export default function useEstudo() {
     setEtapas([]);
     setTempoRestante(0);
     setFaseAtual('estudo');
+    etapaIndexRef.current = 0;
+    tempoRef.current = 0;
+    stopAudio();
   };
 
-  // Run each block sequentially
   useEffect(() => {
     if (!estaEstudando || etapas.length === 0) return;
 
-    let etapaIndex = 0;
-    let tempo = etapas[etapaIndex].duracao;
+    etapaIndexRef.current = 0;
+    tempoRef.current = etapas[etapaIndexRef.current].duracao;
 
-    setFaseAtual(etapas[etapaIndex].tipo);
-    setTempoRestante(tempo);
+    setFaseAtual(etapas[etapaIndexRef.current].tipo);
+    setTempoRestante(tempoRef.current);
 
     const interval = setInterval(() => {
-      // enquanto o Modal de alerta estiver aberto, o tempo deve parar de contar
-      // modal de aviso que o intervalo finalizou
-      if(!modalIntervaloFinalizado){
-          tempo -= 1; 
-          setTempoRestante(tempo);
-      }
+      tempoRef.current -= 1;
+      setTempoRestante(tempoRef.current);
 
-      if (tempo <= 0) {
-        
-        etapaIndex += 1;
+      if (tempoRef.current <= 0) {
+        etapaIndexRef.current += 1;
 
-        if (etapaIndex < etapas.length) {
-          tempo = etapas[etapaIndex].duracao;
-          //se começou o intervalo - tocar alerta
-          if (etapaIndex.tipo === 'estudo') {
+        if (etapaIndexRef.current < etapas.length) {
+          tempoRef.current = etapas[etapaIndexRef.current].duracao;
+
+          const proximaFase = etapas[etapaIndexRef.current].tipo;
+          setFaseAtual(proximaFase);
+          setTempoRestante(tempoRef.current);
+
+          if (proximaFase === 'pausa') {
             handleControlModalIntervaloFinalizado();
             if (audioRef.current) {
               audioRef.current.loop = true;
               audioRef.current.play();
-
-              // Stop sound automatically after 1 minute
-              setTimeout(() => {
-                if (audioRef.current) {
-                  audioRef.current.pause();
-                  audioRef.current.currentTime = 0;
-                }
-              }, 60000);
+              setTimeout(stopAudio, 60000);
             }
           }
-          setFaseAtual(etapas[etapaIndex].tipo);
-          setTempoRestante(tempo);
 
         } else {
           clearInterval(interval);
@@ -126,14 +123,7 @@ export default function useEstudo() {
           if (audioRef.current) {
             audioRef.current.loop = true;
             audioRef.current.play();
-
-            // Stop sound automatically after 1 minute
-            setTimeout(() => {
-              if (audioRef.current) {
-                audioRef.current.pause();
-                audioRef.current.currentTime = 0;
-              }
-            }, 60000);
+            setTimeout(stopAudio, 60000);
           }
         }
       }
@@ -150,10 +140,8 @@ export default function useEstudo() {
     tempoRestante,
     etapas,
     pararEstudo,
-
     modalSessaoFinalizada,
     handleControlModalSessaoFinalizada,
-
     modalIntervaloFinalizado,
     handleControlModalIntervaloFinalizado
   };

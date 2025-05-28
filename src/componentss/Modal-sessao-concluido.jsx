@@ -1,5 +1,4 @@
 import React from 'react';
-import '../modal-conf.css';
 
 function PopupSessaoEstudoFinalizado({ onCloser }) {
   const closePopUp = () => {
@@ -12,7 +11,7 @@ function PopupSessaoEstudoFinalizado({ onCloser }) {
         <h2>STUDY SESSION COMPLETED!</h2>
         <div className="footer">
           <button
-            className="btn-primario"
+            className="btn-primary"
             onClick={closePopUp}
           >
             Close

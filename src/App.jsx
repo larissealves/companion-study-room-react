@@ -8,7 +8,7 @@ import PopupIntervaloFinalizado from './componentss/Modal-intervalo-concluido';
 import useEstudo from './hooks/useEstudo';
 
 import './styles/global.css';
-import './modal-conf.css';
+import './styles/modal-conf.css';
 
 export default function App() {
   const [showConfig, setShowConfig] = useState(false);
@@ -27,10 +27,8 @@ export default function App() {
     tempoRestante,
     etapas,
     pararEstudo,
-
     modalSessaoFinalizada,
     handleControlModalSessaoFinalizada,
-
     modalIntervaloFinalizado,
     handleControlModalIntervaloFinalizado
   } = useEstudo();
@@ -88,17 +86,33 @@ export default function App() {
     setErrors({});
   };
 
+  useEffect(() => {
+  const handleMouseMove = (e) => {
+    const { innerWidth, innerHeight } = window;
+    const x = ((e.clientX / innerWidth) * 10).toFixed(10);
+    const y = ((e.clientY / innerHeight) * 10).toFixed(10);
+    document.body.style.backgroundPosition = `${x}% ${y}%`;
+  };
+
+  window.addEventListener('mousemove', handleMouseMove);
+
+  return () => {
+    window.removeEventListener('mousemove', handleMouseMove);
+  };
+}, []);
+
+
   return (
     <div className="app">
-      {estaEstudando && (
-        <RelogioFundo tempoRestante={totalRemaining} faseAtual={faseAtual} />
-      )}
 
-      <Sala estaEstudando={estaEstudando} onConfigClick={() => setShowConfig(true)} />
+      <div className='main-prhase'>
+        <p> LESS EXPECTATIONS </p>
+        <p>MORE SATISFACTION </p>
+      </div>
 
       {showConfig && (
         <div className="modal-overlay">
-          <div className="modal">
+          <div className="modal new-session">
             <h2>Study Session Setup</h2>
 
             <div className="form-group">
@@ -135,7 +149,7 @@ export default function App() {
                   <label>min</label>
                 </div>
               </div>
-               {errors.time && <p className="erro-texto">{errors.time}</p>}
+              {errors.time && <p className="erro-texto">{errors.time}</p>}
             </div>
 
             {(Number(hours) > 0 || Number(minutes) >= 20) && (
@@ -144,7 +158,7 @@ export default function App() {
                 <select
                   value={breakInterval}
                   onChange={(e) => setBreakInterval(Number(e.target.value))}
-                > 
+                >
                   <option value="10">10 minutes</option>
                   <option value="15">15 minutes</option>
                   <option value="20">20 minutes</option>
@@ -162,7 +176,7 @@ export default function App() {
                   value={breakDuration}
                   onChange={(e) => setBreakDuration(Number(e.target.value))}
                 >
-                  
+
                   <option value="5">5 minutes</option>
                   <option value="10">10 minutes</option>
                   <option value="15">15 minutes</option>
@@ -174,7 +188,7 @@ export default function App() {
             )}
 
             <div className="botoes-modal">
-              <button className="btn-primario" onClick={handleStart}>
+              <button className="btn-primary" onClick={handleStart}>
                 Start Session
               </button>
               <button className="btn-secundario" onClick={() => setShowConfig(false)}>
@@ -185,24 +199,50 @@ export default function App() {
         </div>
       )}
 
-      {estaEstudando && (
-        <div className="painel-estudo">
-          <button className="btn-primario btn-stop-time" onClick={pararEstudo}>
-            🛑 End Session
-          </button>
-          <span><strong>{config.assunto}</strong></span>
+      <div className="study-panel">
+        {estaEstudando ? (
+          <>
+            <div className="study-panel__clock">
+              <RelogioFundo
+                tempoRestante={totalRemaining}
+                faseAtual={faseAtual}
+                estaEstudando={estaEstudando}
+                timeToNextPhase={tempoRestante}
+                breakDuration={breakDuration}
+                breakInterval={breakInterval}
+              />
+            </div>
+            {/* 
+            <div>
+              <span><strong>{config.assunto}</strong></span>
+            </div>
+            */}
+          </>
+        ) : (
+          <>
+            <div className="study-panel__clock">
 
-          {!isNaN(tempoRestante) && (
-            faseAtual === 'estudo' && config.pausas > 0 ? (
-              <span>Time to next break: {formatTime(tempoRestante)}</span>
-            ) : (
-              config.pausas > 0 && config.tempopausas ? (
-                <span>Break ends in: {formatTime(tempoRestante)}</span>
-              ) : null
-            )
-          )}
-        </div>
-      )}
+              <div className="highlighted-phase">Pomodoro Timer </div>
+              <div className="highlighted-phase">Ready to start...</div>
+
+              <div className="highlighted-time">
+                00:00:00
+              </div>
+
+            </div>
+          </>
+        )}
+      </div>
+
+
+      {/* ===================================================
+    COMPONENTES
+=======================================================*/}
+      <Sala estaEstudando={estaEstudando}
+        onConfigClick={() => setShowConfig(true)}
+        endSession={pararEstudo}
+      />
+
 
       {modalSessaoFinalizada && (
         <PopupSessaoEstudoFinalizado onCloser={handleControlModalSessaoFinalizada} />

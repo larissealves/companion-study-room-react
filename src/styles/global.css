@@ -7,12 +7,36 @@
 }
 
 /* ------------ BASE ------------ */
+
 body {
-  margin: 0;
-  font-family: 'Atlassian Sans', sans-serif;
   background-color: var(--cor-fundo);
+  background-image:
+    radial-gradient(circle at 30% 30%, rgba(255, 194, 51, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 70% 70%, rgba(255, 194, 51, 0.04) 0%, transparent 50%),
+    linear-gradient(120deg, var(--cor-secundaria), var(--cor-primaria), var(--cor-secundaria));
+  background-size: 150% 150%;
+  animation: backgroundMotion 25s ease infinite;
+  overflow: hidden;
+  font-family: 'Atlassian Sans', sans-serif;
   color: var(--cor-texto);
 }
+
+@keyframes backgroundAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+
 
 /* ------------ TÍTULOS ------------ */
 h1.titulo-app {
@@ -25,6 +49,29 @@ h1.titulo-app {
   text-shadow: 0 0 10px var(--cor-neon);
 }
 
+.main-prhase {
+  font-family: sans-serif;
+  position: absolute;
+  z-index: 40;
+  width: 100%;
+  justify-items: start;
+  left: 2%;
+  top: 3%;
+
+}
+
+.main-prhase p {
+  color: #fff;
+  font-size: 3.5rem;
+  text-align: center;
+  line-height: 15px;
+  text-shadow:
+    0 0 5px #ff00ff,
+    0 0 10px #ff00ff,
+    0 0 20px #ff00ff,
+    0 0 40px #ff00ff;
+}
+
 .modal h2 {
   margin-top: 0;
   color: var(--cor-neon);
@@ -32,19 +79,25 @@ h1.titulo-app {
 }
 
 .form-group label {
-  margin-bottom: 4px;
-  font-weight: 500;
-  color: var(--cor-texto);
+  color: #e0d6f8;
+  margin-bottom: 6px;
+  font-size: 1.2rem;
+}
+
+.form-group textarea {
+  max-height: -webkit-fill-available;
+  height: 150px;
 }
 
 /* ------------ LAYOUT SALA ------------ */
+/*
 .sala-container {
   position: relative;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   background: linear-gradient(135deg, #2a1b3d, #3b2c5a);
-}
+}*/
 
 .sala-background {
   width: 100%;
@@ -70,8 +123,8 @@ h1.titulo-app {
   gap: 30px;
   position: absolute;
   z-index: 90001;
-  top: 11%;
-  left: 7%;
+  top: 6%;
+  right: 2%;
 }
 
 /* ------------ ELEMENTOS DA SALA ------------ */
@@ -107,23 +160,49 @@ h1.titulo-app {
 }
 
 /* ------------ PAINEL DE ESTUDO ------------ */
-.painel-estudo {
+.study-panel {
   position: absolute;
-  top: 11%;
-  left: 7%;
-  max-width: 200px;
-  max-height: 50%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 12px 16px;
+  position: absolute;
+  top: 42%;
+  left: 2%;
+  max-width: 85%;
+  max-height: 65%;
   border-radius: 12px;
-  background: rgba(0, 0, 0, 0.7);
-  border: 1px solid var(--cor-primaria);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   color: var(--cor-texto);
   overflow-wrap: break-word;
-  overflow: auto;
+  z-index: 40;
+  gap: 141px;
+  display: flex;
+  /* flex-direction: row; */
+  /* text-align: center; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  align-content: space-between;
+
+}
+
+.study-panel:first-child {
+  width: 50%;
+  overflow-y: scroll;
+}
+
+
+.study-panel:nth-child(2) {
+  width: 50%;
+  align-content: center;
+}
+
+.study-panel__clock {
+  flex-direction: column;
+  top: 60%;
+  z-index: 1;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 0 20px rgba(124, 75, 184, 0.5);
+  display: flex;
+
 }
 
 /* ------------ MODAL MONITOR ------------ */
@@ -154,20 +233,21 @@ h1.titulo-app {
 }
 
 /* ------------ BOTÕES ------------ */
-.btn-primario,
+.btn-primary,
 .btn-secundario {
   cursor: pointer;
-  min-height: 35px;
+  min-height: 40px;
   border-radius: 5px;
   border: 1px solid var(--cor-primaria);
+  font-size: 1.2rem;
 }
 
-.btn-primario {
+.btn-primary {
   background-color: var(--cor-primaria);
   color: white;
 }
 
-.btn-primario:hover {
+.btn-primary:hover {
   background-color: #6d3e9e;
 }
 
@@ -180,51 +260,18 @@ h1.titulo-app {
   background-color: #3b2c5a;
 }
 
-.btn-aba-navegacao {
-  color: var(--cor-neon);
-  border-bottom: 2px solid transparent;
-}
 
-.btn-aba-navegacao:hover {
-  border-bottom: 4px solid var(--cor-neon);
-}
-
-.btn-aba-navegacao-active {
-  background-color: var(--cor-primaria);
-  color: white;
-  border-bottom: 2px solid var(--cor-neon);
-}
-
-.btn-icon {
-  background: transparent;
-  color: var(--cor-neon);
-}
-
-.btn-icon:hover {
-  color: #fff;
-}
-
-.bnt-tela-cheia {
-  background-color: transparent;
-  color: var(--cor-neon);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
-}
-
-button.btn-encerrar-estudo {
-  margin-top: 20px;
-}
-
-.container-botoes-mais-informacoes {
+.buttons-more-info-container {
   bottom: 1%;
-    right: 1%;
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    align-items: center;
-    position: absolute;
+  right: 1%;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  position: absolute;
 }
 
-.btn-creditos {
+.btn-credits {
   padding: 6px 14px;
   font-size: 15px;
   font-weight: 500;
@@ -234,17 +281,47 @@ button.btn-encerrar-estudo {
   border: 1px solid #7c4bb8;
   text-decoration: none;
   transition: all 0.3s ease;
-  z-index: 999999999;
+  min-width: 60px;
+  text-align: -webkit-center;
 }
 
-.btn-creditos.doacao {
- 
-}
-
-.btn-creditos:hover {
+.btn-credits:hover {
   background-color: #4a3366;
   color: #fff;
 }
+
+.neon-button {
+  background-color: transparent;
+  color: #ffc233;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 18px 50px;
+  border: 2px solid #ffc233;
+  border-radius: 50px;
+  cursor: pointer;
+  text-align: center;
+  text-transform: uppercase;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 10px #ffc233, 0 0 20px #ffc233, 0 0 30px #ffc233;
+}
+
+.neon-button:hover {
+  background-color: rgba(255, 194, 51, 0.1);
+  box-shadow:
+    0 0 15px #ffc233,
+    0 0 30px #ffc233,
+    0 0 45px #ffc233,
+    0 0 60px #ffc233;
+  transform: scale(1.05);
+}
+
+.neon-button:active {
+  transform: scale(0.97);
+  box-shadow:
+    0 0 8px #ffc233,
+    0 0 16px #ffc233;
+}
+
 
 /* ------------ FORMULÁRIOS ------------ */
 .form-group input,
@@ -277,6 +354,7 @@ button.btn-encerrar-estudo {
     opacity: 0;
     transform: translateX(50px);
   }
+
   100% {
     opacity: 1;
     transform: translateX(0);
@@ -293,14 +371,57 @@ button.btn-encerrar-estudo {
     left: 9%;
   }
 
-  .painel-estudo {
+  .study-panel {
     top: 45% !important;
-    max-width: 80%;
-    max-height: 40%;
+    display: flex;
+    justify-content: center;
+    max-width: 100% !important;
+    width: 100% !important;
   }
 
-  .btn-creditos.doacao {
-      bottom: 5%;
-      right: 1%;
+  .study-panel__clock {
+    text-align: -webkit-center;
   }
+
+  .sala-container__botoes-navegacao {
+    top: 80%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    right: 0%;
+    left: 0%;
+  }
+
+  .main-prhase  {
+
+    justify-items: center;
+  }
+
+  .main-prhase p {
+    font-size: 2.5rem;
+    line-height: normal;
+  }
+
+  .buttons-more-info-container {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .highlighted-time {
+    font-size: 2.3rem;
+    font-weight: bold;
+  }
+
+
+
+  .btn-credits.doacao {
+    bottom: 5%;
+    right: 1%;
+  }
+}
+
+.text-high-blur {
+  filter: blur(21px);
+  opacity: 0.55;
+  transition: all 0.3s ease;
 }

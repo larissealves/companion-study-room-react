@@ -1,37 +1,31 @@
-.relogio-fundo {
-  display: flex;
+.time-clock {
   flex-direction: column;
-  align-items: center;
-  position: fixed;
-  top: 70%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-
   font-family: 'Courier New', monospace;
   font-size: 120px;
   font-weight: bold;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.8);
-  text-shadow: 0 0 20px rgba(124, 75, 184, 0.5);
+  text-shadow: 25 0 20px rgba(124, 75, 184, 108.5);
+  display: flex;
+  float: inline-start;
+  align-items: self-start;
 
-  pointer-events: none;
-  user-select: none;
 }
 
-.tempo-destacado {
+.highlighted-time {
   font-size: 120px;
   font-weight: bold;
+
+  left: -10px;
+  position: relative;
 }
 
-.fase-destacada {
+.highlighted-phase {
   font-size: 28px;
   font-weight: 600;
-  margin-top: 12px;
   letter-spacing: 2px;
 }
 
-.btn-fechar-relogio {
+
+.btn-close-clock {
   background: transparent;
   border: none;
   color: rgba(255, 255, 255, 0.6);
@@ -41,17 +35,17 @@
   pointer-events: auto;
 }
 
-.btn-fechar-relogio:hover {
+.btn-close-clock:hover {
   color: #fff;
 }
 
 
 @media (max-width: 768px) {
-  .relogio-fundo {
+  .time-clock {
     top: 10%;
   }
 
-  .tempo-destacado {
+  .highlighted-time {
     font-size: 20px;
     font-weight: bold;
   }
