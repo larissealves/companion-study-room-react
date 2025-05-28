@@ -34,10 +34,10 @@ export default function RelogioFundo({ tempoRestante, faseAtual, timeToNextPhase
       <div className={hiddenClock ? 'text-high-blur' : ''}>
         {!isNaN(timeToNextPhase) && (
           faseAtual === 'estudo' && breakDuration > 0 ? (
-            <span>{formatTime(timeToNextPhase)} left until half time </span>
+            <span>{formatTime(timeToNextPhase)} left until halftime </span>
           ) : (
             breakDuration > 0 && breakInterval ? (
-              <span> {formatTime(timeToNextPhase)} left to return to studies</span>
+              <span> {formatTime(timeToNextPhase)}  left to resume studying</span>
             ) : null
           ))}
       </div>

@@ -7,34 +7,18 @@
 }
 
 /* ------------ BASE ------------ */
-
 body {
-  background-color: var(--cor-fundo);
-  background-image:
-    radial-gradient(circle at 30% 30%, rgba(255, 194, 51, 0.06) 0%, transparent 40%),
-    radial-gradient(circle at 70% 70%, rgba(255, 194, 51, 0.04) 0%, transparent 50%),
-    linear-gradient(120deg, var(--cor-secundaria), var(--cor-primaria), var(--cor-secundaria));
-  background-size: 150% 150%;
-  animation: backgroundMotion 25s ease infinite;
-  overflow: hidden;
-  font-family: 'Atlassian Sans', sans-serif;
-  color: var(--cor-texto);
+  background-color: #1a002a;
 }
 
-@keyframes backgroundAnimation {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
+.glass-overlay {
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(0.7px);
+    -webkit-backdrop-filter: blur(8px);
+    background-color: rgba(26, 0, 42, 0.8);
+    z-index: 1;
 }
-
 
 
 
@@ -50,26 +34,20 @@ h1.titulo-app {
 }
 
 .main-prhase {
-  font-family: sans-serif;
-  position: absolute;
-  z-index: 40;
-  width: 100%;
-  justify-items: start;
-  left: 2%;
-  top: 3%;
+    position: absolute;
+    z-index: 40;
+    font-size: 120px;
+    font-weight: bold;
+    position: relative;
+    font-family: 'Courier New', monospace;
 
 }
 
 .main-prhase p {
   color: #fff;
-  font-size: 3.5rem;
+  font-size: 4.5rem;
   text-align: center;
   line-height: 15px;
-  text-shadow:
-    0 0 5px #ff00ff,
-    0 0 10px #ff00ff,
-    0 0 20px #ff00ff,
-    0 0 40px #ff00ff;
 }
 
 .modal h2 {
@@ -90,14 +68,6 @@ h1.titulo-app {
 }
 
 /* ------------ LAYOUT SALA ------------ */
-/*
-.sala-container {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  background: linear-gradient(135deg, #2a1b3d, #3b2c5a);
-}*/
 
 .sala-background {
   width: 100%;
@@ -117,14 +87,11 @@ h1.titulo-app {
 }
 
 .sala-container__botoes-navegacao {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  gap: 30px;
-  position: absolute;
-  z-index: 90001;
-  top: 6%;
-  right: 2%;
+    position: absolute;
+    z-index: 40;
+    bottom: 10%;
+    width: 100%;
+    justify-items: center;
 }
 
 /* ------------ ELEMENTOS DA SALA ------------ */
@@ -161,35 +128,20 @@ h1.titulo-app {
 
 /* ------------ PAINEL DE ESTUDO ------------ */
 .study-panel {
-  position: absolute;
-  position: absolute;
-  top: 42%;
-  left: 2%;
-  max-width: 85%;
-  max-height: 65%;
-  border-radius: 12px;
-  color: var(--cor-texto);
-  overflow-wrap: break-word;
-  z-index: 40;
-  gap: 141px;
-  display: flex;
-  /* flex-direction: row; */
-  /* text-align: center; */
-  /* justify-content: center; */
-  /* align-items: center; */
-  align-content: space-between;
-
-}
-
-.study-panel:first-child {
-  width: 50%;
-  overflow-y: scroll;
-}
-
-
-.study-panel:nth-child(2) {
-  width: 50%;
-  align-content: center;
+      position: absolute;
+    top: 30%;
+    border-radius: 12px;
+    color: var(--cor-texto);
+    overflow-wrap: break-word;
+    z-index: 40;
+    gap: 141px;
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    align-content: space-between;
+    width: 100%;
 }
 
 .study-panel__clock {
@@ -262,13 +214,16 @@ h1.titulo-app {
 
 
 .buttons-more-info-container {
-  bottom: 1%;
-  right: 1%;
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  align-items: center;
-  position: absolute;
+    bottom: 1%;
+    right: 1%;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    position: absolute;
+    z-index: 87;
+    display: flex
+;
+
 }
 
 .btn-credits {
@@ -283,6 +238,7 @@ h1.titulo-app {
   transition: all 0.3s ease;
   min-width: 60px;
   text-align: -webkit-center;
+  font-family: 'Atlassian Sans';
 }
 
 .btn-credits:hover {
@@ -291,7 +247,7 @@ h1.titulo-app {
 }
 
 .neon-button {
-  background-color: transparent;
+  background-color: var(--cor-fundo);
   color: #ffc233;
   font-size: 24px;
   font-weight: bold;
@@ -306,7 +262,7 @@ h1.titulo-app {
 }
 
 .neon-button:hover {
-  background-color: rgba(255, 194, 51, 0.1);
+      background-color: var(--cor-secundaria);
   box-shadow:
     0 0 15px #ffc233,
     0 0 30px #ffc233,

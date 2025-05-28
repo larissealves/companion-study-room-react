@@ -37,16 +37,6 @@ export default function App() {
     ? etapas.slice(1).reduce((sum, etapa) => sum + etapa.duracao, 0) + tempoRestante
     : 0;
 
-  const formatTime = (seconds) => {
-    if (typeof seconds !== 'number' || isNaN(seconds) || seconds < 0) return '00:00';
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = seconds % 60;
-    return h > 0
-      ? `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
-      : `${m}:${s.toString().padStart(2, '0')}`;
-  };
-
   useEffect(() => {
     if (showConfig) {
       setSubject('');
@@ -61,9 +51,11 @@ export default function App() {
   const handleStart = () => {
     const newErrors = {};
 
-    if (subject.trim() === '') {
-      newErrors.subject = 'Subject cannot be empty.';
-    }
+    {/*
+      if (subject.trim() === '') {
+        newErrors.subject = 'Subject cannot be empty.';
+      }
+    */}
 
     if (Number(hours) <= 0 && Number(minutes) <= 0) {
       newErrors.time = 'Study time must be greater than 0.';
@@ -78,8 +70,8 @@ export default function App() {
       assunto: subject,
       tempo_horas: Number(hours),
       tempo_minutos: Number(minutes),
-      pausas: breakInterval,
-      tempopausas: breakInterval > 0 ? breakDuration : 0
+       pausas: (Number(hours) > 0 || Number(minutes) >= 20) ? breakInterval : 0,
+  tempopausas: (Number(hours) > 0 || Number(minutes) >= 20) && breakInterval > 0 ? breakDuration : 0,
     });
 
     setShowConfig(false);
@@ -104,17 +96,19 @@ export default function App() {
 
   return (
     <div className="app">
-
-      <div className='main-prhase'>
-        <p> LESS EXPECTATIONS </p>
-        <p>MORE SATISFACTION </p>
-      </div>
+      
+        <div className='main-prhase'>
+          <p> Pomodoro Timer  </p>
+        </div>
+     
+      
 
       {showConfig && (
         <div className="modal-overlay">
           <div className="modal new-session">
             <h2>Study Session Setup</h2>
 
+            {/* 
             <div className="form-group">
               <label>Subject:</label>
               <textarea
@@ -124,6 +118,8 @@ export default function App() {
               />
               {errors.subject && <p className="erro-texto">{errors.subject}</p>}
             </div>
+            */}
+            
 
             <div className="form-group tempo-estudo">
               <label>Study time</label>
@@ -169,7 +165,7 @@ export default function App() {
               </div>
             )}
 
-            {breakInterval > 0 && (
+            {(Number(hours) > 0 || Number(minutes) >= 20) && (breakInterval > 0 )&& (
               <div className="form-group">
                 <label>Break duration:</label>
                 <select
@@ -213,16 +209,15 @@ export default function App() {
               />
             </div>
             {/* 
-            <div>
-              <span><strong>{config.assunto}</strong></span>
-            </div>
+              <div>
+                <span><strong>{config.assunto}</strong></span>
+              </div>
             */}
           </>
         ) : (
           <>
             <div className="study-panel__clock">
 
-              <div className="highlighted-phase">Pomodoro Timer </div>
               <div className="highlighted-phase">Ready to start...</div>
 
               <div className="highlighted-time">

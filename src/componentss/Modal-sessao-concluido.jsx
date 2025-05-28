@@ -7,7 +7,7 @@ function PopupSessaoEstudoFinalizado({ onCloser }) {
 
   return (
     <div className="modal-overlay modal-sessao-finalizada">
-      <div className="modal">
+      <div className="modal alert">
         <h2>STUDY SESSION COMPLETED!</h2>
         <div className="footer">
           <button
