@@ -61,6 +61,7 @@ A minimalist and ad-free Pomodoro timer to help you stay focused during study se
 <img src="https://github.com/larissealves/companion-study-room-react/blob/master/public/Screenshots/img-01.png" />
 <img src="https://github.com/larissealves/companion-study-room-react/blob/master/public/Screenshots/img-02.png" />
 <img src="https://github.com/larissealves/companion-study-room-react/blob/master/public/Screenshots/img-03.png" />
+<img src="https://github.com/larissealves/companion-study-room-react/blob/master/public/Screenshots/img-04.png" />
 
 ---
 
