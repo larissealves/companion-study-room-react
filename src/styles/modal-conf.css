@@ -46,13 +46,6 @@
     border-bottom: 1px solid #f62a14;
 }
 
-.modal.alert h2 {
-    text-align: center;
-    margin-bottom: 24px;
-    color: #ff7de9;
-    font-size: 1.3rem;
-}
-
 .form-group {
   margin-bottom: 16px;
   display: flex;
