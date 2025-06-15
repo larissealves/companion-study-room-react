@@ -11,7 +11,7 @@ function PopupApoieDesenvolvedor({ onClose }) {
   return (
     <div>
         <Link
-          className="btn-credits"
+          className="btn-primary btn-credits"
           onClick={() => setMostrarPopupDoacao(true)}
           title="Support the developer"
         >
@@ -29,7 +29,7 @@ function PopupApoieDesenvolvedor({ onClose }) {
         <p>If this project helped you focus or brought you joy, consider supporting with a coffee ☕</p>
 
         <ul style={{ lineHeight: '1.8', marginTop: '12px' }}>
-          <li>💌 <strong>PayPal:</strong> alves.larisser@gmail.com</li>
+          <li>💌 <strong>PayPal and PIX:</strong> alves.larisser@gmail.com</li>
           <li>🌍 <strong>Wise:</strong> larisser4</li>
         </ul>
 

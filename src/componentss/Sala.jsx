@@ -17,7 +17,7 @@ export default function Sala({ estaEstudando, onConfigClick, endSession }) {
         <Link
           to="/creditos"
           target="_blank"
-          className="btn-credits"
+          className="btn-primary btn-credits"
         >
           Credits
         </Link>

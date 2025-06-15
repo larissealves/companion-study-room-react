@@ -10,6 +10,11 @@ import useEstudo from './hooks/useEstudo';
 import './styles/global.css';
 import './styles/modal-conf.css';
 
+import tomate1 from '../public/assets/images/tomate_01.png'
+import tomate2 from '../public/assets/images/tomate_02.png'
+import tomate3 from '../public/assets/images/tomate_03.png'
+import tomate4 from '../public/assets/images/tomate_04.png'
+
 export default function App() {
   const [showConfig, setShowConfig] = useState(false);
   const [subject, setSubject] = useState('');
@@ -98,6 +103,11 @@ export default function App() {
     <div className="app">
       
         <div className='main-prhase'>
+          <img 
+              src={tomate1} 
+              className= ""
+              alt="tomate icon" 
+            />
           <p> Pomodoro Timer  </p>
         </div>
      
@@ -222,6 +232,24 @@ export default function App() {
 
               <div className="highlighted-time">
                 00:00:00
+              </div>
+
+              <div>
+                <img 
+                  src={tomate2} 
+                  className= ""
+                  alt="tomate icon" 
+                />
+                <img 
+                  src={tomate3} 
+                  className= ""
+                  alt="tomate icon" 
+                />
+                <img 
+                  src={tomate4} 
+                  className= ""
+                  alt="tomate icon" 
+                />
               </div>
 
             </div>

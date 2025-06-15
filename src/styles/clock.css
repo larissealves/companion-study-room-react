@@ -25,19 +25,25 @@
 
 
 .btn-close-clock {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 24px;
-  cursor: pointer;
-
-  pointer-events: auto;
+    background-color: transparent;
+    color: var(--cor-texto);
+    font-size: 24px;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-shadow: 0 0 70px #f85739, 0 0 70px #f85739, 0 0 70px #f85739;
 }
 
 .btn-close-clock:hover {
-  color: #fff;
+  text-shadow: 
+    0 0 15px #f85739, 
+    0 0 30px #f85739, 
+    0 0 45px #f85739, 
+    0 0 60px #fa845e;
+  transform: scale(1.05);
 }
-
 
 @media (max-width: 768px) {
   .time-clock {
@@ -45,7 +51,7 @@
   }
 
   .highlighted-time {
-    font-size: 20px;
+    font-size: 2.3rem;
     font-weight: bold;
   }
 }
