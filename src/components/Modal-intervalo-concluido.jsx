@@ -8,7 +8,7 @@ function PopupIntervaloFinalizado({ onCloser }) {
   return (
     <div className="modal-overlay modal-sessao-finalizada">
       <div className="modal alert">
-        <h2>STUDY SESSION COMPLETED!</h2>
+        <h2>Break is over!</h2>
         <div className="footer">
           <button
             className="btn-primary"

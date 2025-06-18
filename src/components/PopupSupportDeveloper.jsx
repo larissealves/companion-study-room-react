@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-function PopupApoieDesenvolvedor({ onClose }) {
+function PopupSupportDeveloper({ onClose }) {
   const [mostrarPopupDoacao, setMostrarPopupDoacao] = useState(false);
 
   const closePopUp = () => {
@@ -57,4 +57,4 @@ function PopupApoieDesenvolvedor({ onClose }) {
   );
 }
 
-export default PopupApoieDesenvolvedor;
+export default PopupSupportDeveloper;

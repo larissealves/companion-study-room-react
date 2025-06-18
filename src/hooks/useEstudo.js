@@ -28,62 +28,61 @@ export default function useEstudo() {
 
   const [config, setConfig] = useState({
     assunto: '',
-    tempo_horas: 1,
+    tempo_horas: 0,
     tempo_minutos: 0,
-    pausas: 25,
-    tempopausas: 5
+    pausas: 0,
+    tempo_pausas: 0
   });
 
-  const [estaEstudando, setEstaEstudando] = useState(false);
-  const [faseAtual, setFaseAtual] = useState('estudo');
+  const [isStudying, setisStudying] = useState(false);
+  const [faseAtual, setFaseAtual] = useState('studying');
   const [tempoRestante, setTempoRestante] = useState(0);
   const [etapas, setEtapas] = useState([]);
 
   const iniciarEstudo = (dados) => {
     const total = (dados.tempo_horas * 60) + Number(dados.tempo_minutos);
     const intervalo = dados.pausas;
-    const pausa = dados.tempopausas;
-
+    const pausa = dados.tempo_pausas <= 0 ? dados.tempo_pausas : 0;
     const etapasTemp = [];
-
-    if (intervalo <= 0 || pausa <= 0 || intervalo >= total) {
-      etapasTemp.push({ tipo: 'estudo', duracao: total * 60 });
+    console.log(dados.pausas);
+    console.log(pausa);
+    if (intervalo <= 0 || pausa <= 0 ) {
+      //(intervalo <= 0 || pausa <= 0 || intervalo >= total)
+      etapasTemp.push({ tipo: 'studying', duracao: total * 60 });
     } else {
       let restante = total;
       while (restante > intervalo) {
-        etapasTemp.push({ tipo: 'estudo', duracao: intervalo * 60 });
-        etapasTemp.push({ tipo: 'pausa', duracao: pausa * 60 });
+        etapasTemp.push({ tipo: 'studying', duracao: intervalo * 60 });
+        etapasTemp.push({ tipo: 'rest', duracao: pausa * 60 });
         restante -= intervalo;
       }
       if (restante > 0) {
-        etapasTemp.push({ tipo: 'estudo', duracao: restante * 60 });
+        etapasTemp.push({ tipo: 'studying', duracao: restante * 60 });
       }
     }
 
-    console.log('🚀 Etapas geradas:', etapasTemp);
-
     etapaIndexRef.current = 0;
     tempoRef.current = etapasTemp[0]?.duracao || 0;
-    setFaseAtual(etapasTemp[0]?.tipo || 'estudo');
+    setFaseAtual(etapasTemp[0]?.tipo || 'studying');
     setTempoRestante(tempoRef.current);
 
     setConfig(dados);
     setEtapas(etapasTemp);
-    setEstaEstudando(true);
+    setisStudying(true);
   };
 
-  const pararEstudo = () => {
-    setEstaEstudando(false);
+  const stopStudy = () => {
+    setisStudying(false);
     setEtapas([]);
     setTempoRestante(0);
-    setFaseAtual('estudo');
+    setFaseAtual('studying');
     etapaIndexRef.current = 0;
     tempoRef.current = 0;
     stopAudio();
   };
 
   useEffect(() => {
-    if (!estaEstudando || etapas.length === 0) return;
+    if (!isStudying || etapas.length === 0) return;
 
     etapaIndexRef.current = 0;
     tempoRef.current = etapas[etapaIndexRef.current].duracao;
@@ -105,7 +104,7 @@ export default function useEstudo() {
           setFaseAtual(proximaFase);
           setTempoRestante(tempoRef.current);
 
-          if (proximaFase === 'pausa') {
+          if (proximaFase === 'rest') {
             handleControlModalIntervaloFinalizado();
             if (audioRef.current) {
               audioRef.current.loop = true;
@@ -116,7 +115,7 @@ export default function useEstudo() {
 
         } else {
           clearInterval(interval);
-          setEstaEstudando(false);
+          setisStudying(false);
           setEtapas([]);
           handleControlModalSessaoFinalizada();
 
@@ -130,16 +129,16 @@ export default function useEstudo() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [estaEstudando, etapas]);
+  }, [isStudying, etapas]);
 
   return {
     config,
-    estaEstudando,
+    isStudying,
     iniciarEstudo,
     faseAtual,
     tempoRestante,
     etapas,
-    pararEstudo,
+    stopStudy,
     modalSessaoFinalizada,
     handleControlModalSessaoFinalizada,
     modalIntervaloFinalizado,

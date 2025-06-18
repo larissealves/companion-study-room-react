@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
-import Sala from './componentss/Sala';
-import RelogioFundo from './componentss/Clock';
-import PopupSessaoEstudoFinalizado from './componentss/Modal-sessao-concluido';
-import PopupIntervaloFinalizado from './componentss/Modal-intervalo-concluido';
+import Clock from './components/Clock';
+import PopupSessaoEstudoFinalizado from './components/Modal-sessao-concluido';
+import PopupIntervaloFinalizado from './components/Modal-intervalo-concluido';
 
 import useEstudo from './hooks/useEstudo';
 
+import tomate1 from '../src/assets/images/tomate_01.png'
 import './styles/global.css';
 import './styles/modal-conf.css';
 
-import tomate1 from '../public/assets/images/tomate_01.png'
-import tomate2 from '../public/assets/images/tomate_02.png'
-import tomate3 from '../public/assets/images/tomate_03.png'
-import tomate4 from '../public/assets/images/tomate_04.png'
 
 export default function App() {
   const [showConfig, setShowConfig] = useState(false);
@@ -26,12 +22,12 @@ export default function App() {
 
   const {
     config,
-    estaEstudando,
+    isStudying,
     iniciarEstudo,
     faseAtual,
     tempoRestante,
     etapas,
-    pararEstudo,
+    stopStudy,
     modalSessaoFinalizada,
     handleControlModalSessaoFinalizada,
     modalIntervaloFinalizado,
@@ -42,7 +38,8 @@ export default function App() {
     ? etapas.slice(1).reduce((sum, etapa) => sum + etapa.duracao, 0) + tempoRestante
     : 0;
 
-  useEffect(() => {
+  /*useEffect(() => {
+    
     if (showConfig) {
       setSubject('');
       setHours('');
@@ -51,16 +48,10 @@ export default function App() {
       setBreakDuration(5);
       setErrors({});
     }
-  }, [showConfig]);
+  }, [showConfig]);*/
 
   const handleStart = () => {
     const newErrors = {};
-
-    {/*
-      if (subject.trim() === '') {
-        newErrors.subject = 'Subject cannot be empty.';
-      }
-    */}
 
     if (Number(hours) <= 0 && Number(minutes) <= 0) {
       newErrors.time = 'Study time must be greater than 0.';
@@ -70,67 +61,38 @@ export default function App() {
       setErrors(newErrors);
       return;
     }
-
+    
     iniciarEstudo({
       assunto: subject,
       tempo_horas: Number(hours),
       tempo_minutos: Number(minutes),
-       pausas: (Number(hours) > 0 || Number(minutes) >= 20) ? breakInterval : 0,
-  tempopausas: (Number(hours) > 0 || Number(minutes) >= 20) && breakInterval > 0 ? breakDuration : 0,
+      pausas: (Number(hours) > 0 || Number(minutes) >= 20) ? breakInterval : 0,
+      tempopausas: (breakInterval > 0 ? breakDuration : 0),
     });
 
     setShowConfig(false);
     setErrors({});
   };
 
-  useEffect(() => {
-  const handleMouseMove = (e) => {
-    const { innerWidth, innerHeight } = window;
-    const x = ((e.clientX / innerWidth) * 10).toFixed(10);
-    const y = ((e.clientY / innerHeight) * 10).toFixed(10);
-    document.body.style.backgroundPosition = `${x}% ${y}%`;
-  };
-
-  window.addEventListener('mousemove', handleMouseMove);
-
-  return () => {
-    window.removeEventListener('mousemove', handleMouseMove);
-  };
-}, []);
-
 
   return (
     <div className="app">
-      
-        <div className='main-prhase'>
-          <img 
-              src={tomate1} 
-              className= ""
-              alt="tomate icon" 
-            />
-          <p> Pomodoro Timer  </p>
-        </div>
-     
-      
+
+      <div className='main-prhase'>
+        <img
+          src={tomate1}
+          className=""
+          alt="tomate icon"
+        />
+        <p> Pomodoro Timer  </p>
+      </div>
+
+
 
       {showConfig && (
         <div className="modal-overlay">
           <div className="modal new-session">
             <h2>Study Session Setup</h2>
-
-            {/* 
-            <div className="form-group">
-              <label>Subject:</label>
-              <textarea
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                placeholder="e.g. Math, React, History..."
-              />
-              {errors.subject && <p className="erro-texto">{errors.subject}</p>}
-            </div>
-            */}
-            
-
             <div className="form-group tempo-estudo">
               <label>Study time</label>
               <div>
@@ -165,17 +127,17 @@ export default function App() {
                   value={breakInterval}
                   onChange={(e) => setBreakInterval(Number(e.target.value))}
                 >
+                  <option value="0">No breaks</option>
                   <option value="10">10 minutes</option>
                   <option value="15">15 minutes</option>
                   <option value="20">20 minutes</option>
                   <option value="25">25 minutes</option>
                   <option value="30">30 minutes</option>
-                  <option value="0">No breaks</option>
                 </select>
               </div>
             )}
 
-            {(Number(hours) > 0 || Number(minutes) >= 20) && (breakInterval > 0 )&& (
+            {(breakInterval > 0) && (
               <div className="form-group">
                 <label>Break duration:</label>
                 <select
@@ -204,68 +166,19 @@ export default function App() {
           </div>
         </div>
       )}
-
-      <div className="study-panel">
-        {estaEstudando ? (
-          <>
-            <div className="study-panel__clock">
-              <RelogioFundo
-                tempoRestante={totalRemaining}
-                faseAtual={faseAtual}
-                estaEstudando={estaEstudando}
-                timeToNextPhase={tempoRestante}
-                breakDuration={breakDuration}
-                breakInterval={breakInterval}
-              />
-            </div>
-            {/* 
-              <div>
-                <span><strong>{config.assunto}</strong></span>
-              </div>
-            */}
-          </>
-        ) : (
-          <>
-            <div className="study-panel__clock">
-
-              <div className="highlighted-phase">Ready to start...</div>
-
-              <div className="highlighted-time">
-                00:00:00
-              </div>
-
-              <div>
-                <img 
-                  src={tomate2} 
-                  className= ""
-                  alt="tomate icon" 
-                />
-                <img 
-                  src={tomate3} 
-                  className= ""
-                  alt="tomate icon" 
-                />
-                <img 
-                  src={tomate4} 
-                  className= ""
-                  alt="tomate icon" 
-                />
-              </div>
-
-            </div>
-          </>
-        )}
-      </div>
-
-
-      {/* ===================================================
-    COMPONENTES
-=======================================================*/}
-      <Sala estaEstudando={estaEstudando}
+      <Clock
+        remainingTime={totalRemaining}
+        currentPhase={faseAtual}
+        timeToNextPhase={tempoRestante}
+        breakDuration={breakDuration}
+        breakInterval={breakInterval}
+        isStudying={isStudying}
         onConfigClick={() => setShowConfig(true)}
-        endSession={pararEstudo}
+        endSession={stopStudy}
       />
-
+      {/* ===================================================
+          COMPONENTES
+      =======================================================*/}
 
       {modalSessaoFinalizada && (
         <PopupSessaoEstudoFinalizado onCloser={handleControlModalSessaoFinalizada} />

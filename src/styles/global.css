@@ -132,32 +132,22 @@ h1.titulo-app {
 
 /* ------------ PAINEL DE ESTUDO ------------ */
 .study-panel {
-  position: absolute;
-  top: 30%;
-  border-radius: 12px;
-  color: var(--cor-texto);
-  overflow-wrap: break-word;
-  z-index: 40;
-  gap: 141px;
-  display: flex;
-  flex-direction: row;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  align-content: space-between;
-  width: 100%;
+    margin-top: 5%;
+    color: var(--cor-texto);
+    z-index: 40;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
 }
 
 .study-panel__clock {
-  flex-direction: column;
-  top: 60%;
-  z-index: 1;
-  font-family: 'Courier New', monospace;
-  font-size: 16px;
-  font-weight: bold;
-  color: var(--cor-texto);
-  text-shadow: 0 0 20px rgba(124, 75, 184, 0.5);
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 20px rgba(124, 75, 184, 0.5);
+ 
 
   img {
     width: 5%;
@@ -231,13 +221,9 @@ h1.titulo-app {
 
 
 .buttons-more-info-container {
-  bottom: 1%;
-  right: 1%;
   display: flex;
   gap: 16px;
   align-items: center;
-  position: absolute;
-  z-index: 87;
   display: flex;
 
 }
@@ -267,6 +253,7 @@ a.btn-credits:hover {
   border-radius: 50px;
   cursor: pointer;
   text-align: center;
+  width: fit-content;
   text-transform: uppercase;
   transition: all 0.3s ease-in-out;
   box-shadow: 0 0 15px #f85739, 0 0 40px #f85739, 0 0 40px #f85739;
@@ -319,11 +306,13 @@ a.btn-credits:hover {
   }
 
   .study-panel {
-    top: 15% !important;
+    margin-top: 30% !important;
     display: flex;
     justify-content: center;
     max-width: 100% !important;
     width: 100% !important;
+    flex-direction: column-reverse;
+    gap: 100px;
 
     img {
       width: 20%;
