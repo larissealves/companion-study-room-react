@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import alertaSom from '../sounds/sound.mp3';
+import alertaSom from '../assets/sounds/sound.mp3';
 
 export default function useStudy() {
   const audioRef = useRef(new Audio(alertaSom));
