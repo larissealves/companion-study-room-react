@@ -5,8 +5,6 @@ import '../styles/clock.css'
 
 import PopupSupportDeveloper from './PopupSupportDeveloper';
 
-
-import tomate1 from '../assets/images/tomate_01.png'
 import tomate2 from '../assets/images/tomate_02.png'
 import tomate3 from '../assets/images/tomate_03.png'
 import tomate4 from '../assets/images/tomate_04.png'
@@ -84,7 +82,8 @@ export default function Clock({ remainingTime, currentPhase, timeToNextPhase, br
                   ) : (
                     breakInterval > 0  ? (
                       <span>{formatTime(timeToNextPhase)} left to resume studying</span>
-                    ) : null
+                    ) 
+                    : null
                   )
                 )}
               </div>
@@ -95,6 +94,7 @@ export default function Clock({ remainingTime, currentPhase, timeToNextPhase, br
             </>
           )}
       </div>
+
     {/* ===================================================
         COMPONENTES
     ======================================================= */}

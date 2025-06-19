@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
+// 🗂️ COMPONENTES
 import Clock from './components/Clock';
 import PopupSessaoEstudoFinalizado from './components/Modal-sessao-concluido';
-import PopupIntervaloFinalizado from './components/Modal-intervalo-concluido';
 
-import useEstudo from './hooks/useEstudo';
+// 🧩 HOOKS
+import useStudy from './hooks/useStudy.js';
 
-import tomate1 from '../src/assets/images/tomate_01.png'
+// 📦 ASSETS
+import tomate1 from '../src/assets/images/tomate_01.png';
+
+// 🎨 STYLES
 import './styles/global.css';
 import './styles/modal-conf.css';
-
 
 export default function App() {
   const [showConfig, setShowConfig] = useState(false);
@@ -23,23 +26,20 @@ export default function App() {
   const {
     config,
     isStudying,
-    iniciarEstudo,
-    faseAtual,
-    tempoRestante,
-    etapas,
+    startStudy,
+    CurrentPhase,
+    timeRemaining,
+    steps,
     stopStudy,
-    modalSessaoFinalizada,
-    handleControlModalSessaoFinalizada,
-    modalIntervaloFinalizado,
-    handleControlModalIntervaloFinalizado
-  } = useEstudo();
+    modalSessionFinalized,
+    handleControlModalSessionFinalized
+  } = useStudy();
 
-  const totalRemaining = etapas?.length > 0
-    ? etapas.slice(1).reduce((sum, etapa) => sum + etapa.duracao, 0) + tempoRestante
+  const totalRemaining = steps?.length > 0
+    ? steps.slice(1).reduce((sum, etapa) => sum + etapa.duracao, 0) + timeRemaining
     : 0;
 
-  /*useEffect(() => {
-    
+  useEffect(() => {
     if (showConfig) {
       setSubject('');
       setHours('');
@@ -48,7 +48,7 @@ export default function App() {
       setBreakDuration(5);
       setErrors({});
     }
-  }, [showConfig]);*/
+  }, [showConfig]);
 
   const handleStart = () => {
     const newErrors = {};
@@ -61,38 +61,37 @@ export default function App() {
       setErrors(newErrors);
       return;
     }
-    
-    iniciarEstudo({
-      assunto: subject,
-      tempo_horas: Number(hours),
-      tempo_minutos: Number(minutes),
-      pausas: (Number(hours) > 0 || Number(minutes) >= 20) ? breakInterval : 0,
-      tempopausas: (breakInterval > 0 ? breakDuration : 0),
+
+    startStudy({
+      subject: subject,
+      time_hours: Number(hours),
+      time_minutes: Number(minutes),
+      breaks: (Number(hours) > 0 || Number(minutes) >= 20) ? breakInterval : 0,
+      time_breaks: (breakInterval > 0 ? breakDuration : 0),
     });
 
     setShowConfig(false);
     setErrors({});
   };
 
-
   return (
     <div className="app">
 
+      {/* === Header === */}
       <div className='main-prhase'>
         <img
           src={tomate1}
-          className=""
           alt="tomate icon"
         />
-        <p> Pomodoro Timer  </p>
+        <p>Pomodoro Timer</p>
       </div>
 
-
-
+      {/* === Configure Session Modal === */}
       {showConfig && (
         <div className="modal-overlay">
           <div className="modal new-session">
             <h2>Study Session Setup</h2>
+
             <div className="form-group tempo-estudo">
               <label>Study time</label>
               <div>
@@ -144,7 +143,6 @@ export default function App() {
                   value={breakDuration}
                   onChange={(e) => setBreakDuration(Number(e.target.value))}
                 >
-
                   <option value="5">5 minutes</option>
                   <option value="10">10 minutes</option>
                   <option value="15">15 minutes</option>
@@ -156,36 +154,42 @@ export default function App() {
             )}
 
             <div className="botoes-modal">
-              <button className="btn-primary" onClick={handleStart}>
-                Start Session
-              </button>
-              <button className="btn-secundario" onClick={() => setShowConfig(false)}>
+              <div className='container-btn-start-session'>
+                <button
+                  className="btn-primary"
+                  onClick={handleStart}
+                >
+                  Start Session
+                </button>
+              </div>
+              <button
+                className="btn-secundario"
+                onClick={() => setShowConfig(false)}
+              >
                 Cancel
               </button>
             </div>
           </div>
         </div>
       )}
+
+      {/* === Clock === */}
       <Clock
         remainingTime={totalRemaining}
-        currentPhase={faseAtual}
-        timeToNextPhase={tempoRestante}
+        currentPhase={CurrentPhase}
+        timeToNextPhase={timeRemaining}
         breakDuration={breakDuration}
         breakInterval={breakInterval}
         isStudying={isStudying}
         onConfigClick={() => setShowConfig(true)}
         endSession={stopStudy}
       />
-      {/* ===================================================
-          COMPONENTES
-      =======================================================*/}
 
-      {modalSessaoFinalizada && (
-        <PopupSessaoEstudoFinalizado onCloser={handleControlModalSessaoFinalizada} />
-      )}
-
-      {modalIntervaloFinalizado && (
-        <PopupIntervaloFinalizado onCloser={handleControlModalIntervaloFinalizado} />
+      {/* === Session Completed Modal === */}
+      {modalSessionFinalized && (
+        <PopupSessaoEstudoFinalizado 
+          onClose={handleControlModalSessionFinalized} 
+        />
       )}
 
     </div>

@@ -1,8 +1,8 @@
 import React from 'react';
 
-function PopupSessaoEstudoFinalizado({ onCloser }) {
+function PopupSessaoEstudoFinalizado({ onClose }) {
   const closePopUp = () => {
-    onCloser();
+    onClose();
   };
 
   return (

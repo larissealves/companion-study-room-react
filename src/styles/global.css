@@ -357,3 +357,45 @@ a.btn-credits:hover {
   opacity: 0.55;
   transition: all 0.3s ease;
 }
+
+.container-btn-start-session {
+  position: relative;
+}
+
+.container-btn-start-session button {
+  position: relative;
+  z-index: 2;
+}
+
+.container-btn-start-session img.icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+  font-size: 20px;
+  width: 20px !important;
+  display: none !important;
+}
+
+/* Animação de flutuar */
+.container-btn-start-session  .icon.animate {
+  animation: floatUp 1.5s forwards;
+  display: none;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -100%) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -200%) scale(1);
+    opacity: 0;
+  }
+}
