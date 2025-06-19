@@ -1,12 +1,12 @@
 import React from 'react';
 
-function PopupSessaoEstudoFinalizado({ onClose }) {
+function popupSessionCompleted({ onClose }) {
   const closePopUp = () => {
     onClose();
   };
 
   return (
-    <div className="modal-overlay modal-sessao-finalizada">
+    <div className="modal-overlay ">
       <div className="modal alert">
         <h2>STUDY SESSION COMPLETED!</h2>
         <div className="footer">
@@ -22,4 +22,4 @@ function PopupSessaoEstudoFinalizado({ onClose }) {
   );
 }
 
-export default PopupSessaoEstudoFinalizado;
+export default popupSessionCompleted;

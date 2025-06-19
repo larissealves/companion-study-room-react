@@ -70,6 +70,10 @@
   background-color:#fff;
 }
 
+.modal-overlay .alert .footer {
+  justify-self: center;
+}
+
 .botoes-modal {
   display: flex;
   justify-content: space-between;

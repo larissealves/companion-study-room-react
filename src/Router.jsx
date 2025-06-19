@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import App from './App';
-import Creditos from '../src/components/Creditos';
+import Creditos from './components/Credits';
 
 import React from 'react';
 

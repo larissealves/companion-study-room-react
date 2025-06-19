@@ -29,8 +29,8 @@ function PopupSupportDeveloper({ onClose }) {
         <p>If this project helped you focus or brought you joy, consider supporting with a coffee ☕</p>
 
         <ul style={{ lineHeight: '1.8', marginTop: '12px' }}>
-          <li>💌 <strong>PayPal and PIX:</strong> alves.larisser@gmail.com</li>
-          <li>🌍 <strong>Wise:</strong> larisser4</li>
+          💌 <strong>PayPal and PIX:</strong> alves.larisser@gmail.com
+          🌍 <strong>Wise:</strong> larisser4
         </ul>
 
         <p style={{ marginTop: '20px' }}>

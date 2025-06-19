@@ -28,7 +28,6 @@ export default function Clock({ remainingTime, currentPhase, timeToNextPhase, br
 <div className="study-panel">
   <div className="buttons-more-info-container">
         <PopupSupportDeveloper />
-
         <Link
           to="/creditos"
           target="_blank"

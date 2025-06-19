@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 // 🗂️ COMPONENTES
 import Clock from './components/Clock';
-import PopupSessaoEstudoFinalizado from './components/Modal-sessao-concluido';
+import PopupSessionCompleted from './components/PopupSessionCompleted.jsx';
 
 // 🧩 HOOKS
 import useStudy from './hooks/useStudy.js';
@@ -187,7 +187,7 @@ export default function App() {
 
       {/* === Session Completed Modal === */}
       {modalSessionFinalized && (
-        <PopupSessaoEstudoFinalizado 
+        <PopupSessionCompleted 
           onClose={handleControlModalSessionFinalized} 
         />
       )}

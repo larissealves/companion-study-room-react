@@ -7,7 +7,6 @@
   display: flex;
   float: inline-start;
   align-items: self-start;
-
 }
 
 .highlighted-time {
@@ -22,7 +21,6 @@
   font-weight: 600;
   letter-spacing: 2px;
 }
-
 
 .btn-close-clock {
     background-color: transparent;
