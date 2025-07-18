@@ -4,7 +4,7 @@ A minimalist and ad-free Pomodoro timer to help you stay focused during study se
 
 ---
 
-## 📦 Live Demo
+## 📦 Live Demo 
 
 👉 [Try it live](https://companion-study-room-react.vercel.app/)
 
